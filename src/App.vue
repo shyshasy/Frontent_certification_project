@@ -42,33 +42,26 @@ export default {
 #app {
   font-family: 'Arial', sans-serif; /* Police simple et moderne */
   text-align: center;
-  color: #444; /* Couleur du texte plus douce */
-  background-color: #f7f7f7; /* Fond gris clair pour une sensation d'espace */
+  color: #333; /* Couleur du texte */
+  background-color: #ffffff; /* Fond blanc pour une sensation d'espace */
   min-height: 100vh; /* Remplir tout l'écran */
   display: flex;
   flex-direction: column; /* Alignement vertical */
   align-items: center; /* Centrage horizontal */
-  padding: 20px 15px; /* Espacement autour de l'application avec padding latéral */
+  padding: 20px; /* Espacement autour de l'application */
 }
 
 .container {
   width: 100%;
-  max-width: 600px; /* Largeur maximale ajustée pour un design plus étroit */
-  background: #ffffff; /* Fond blanc pour un contraste agréable */
+  max-width: 800px; /* Largeur maximale pour un design propre */
+  background: #f8f9fa; /* Fond léger */
   border-radius: 10px; /* Coins arrondis pour un effet doux */
   padding: 20px; /* Espacement interne */
-  
-  /* Bordure avec dégradé et épaisseur augmentée */
-  border: 12px solid; /* Épaisseur de la bordure augmentée */
-  border-image: linear-gradient(45deg, #ffffff, #007bff) 1; /* Dégradé vif du blanc au bleu */
-
-  /* Ombre légère */
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Ombre réduite pour une apparence plus douce */
-  margin: 20px auto; /* Marge auto pour centrer le conteneur */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Ombre légère pour profondeur */
 }
 
 .language-selector-container {
-  margin: 40px 0 20px; /* Espacement supérieur augmenté pour séparer de la navbar */
+  margin-bottom: 20px; /* Espacement sous le sélecteur de langue */
 }
 
 .language-selector {
@@ -76,15 +69,13 @@ export default {
   font-size: 16px;
   border-radius: 5px;
   border: 2px solid #007bff; /* Couleur vive pour le contour */
-  background-color: #f0f8ff; /* Fond légèrement coloré */
+  background-color: #ffffff; /* Fond blanc */
   color: #333; /* Couleur du texte */
-  transition: border-color 0.3s, background-color 0.3s; /* Transition douce pour le contour et le fond */
+  transition: border-color 0.3s; /* Transition douce pour le contour */
 }
 
-/* Suppression de l'effet de survol */
 .language-selector:hover {
-  border-color: #007bff; /* Conserve la couleur au survol */
-  background-color: #f0f8ff; /* Conserve la nuance de fond au survol */
+  border-color: #0056b3; /* Changement de couleur au survol */
 }
 
 .language-selector:focus {

@@ -10,6 +10,9 @@ import en from './locales/en'; // Importer le fichier de traduction en anglais
 import fr from './locales/fr'; // Importer le fichier de traduction en français
 import ar from './locales/ar'; // Importer le fichier de traduction en arabe
 
+// Importer et configurer Pinia
+import { createPinia } from 'pinia';
+
 // Configuration des traductions
 const messages = {
   en,
@@ -22,8 +25,12 @@ const i18n = createI18n({
   messages,
 });
 
-// Création de l'application Vue et ajout de i18n et du routeur
-createApp(App)
-  .use(router)
-  .use(i18n) // Ajouter i18n à l'application
-  .mount('#app');
+// Création de l'application Vue et ajout de Pinia, i18n et du routeur
+const app = createApp(App);
+
+const pinia = createPinia(); // Créer une instance de Pinia
+app.use(pinia); // Ajouter Pinia à l'application
+app.use(router); // Ajouter le routeur
+app.use(i18n); // Ajouter i18n à l'application
+
+app.mount('#app'); // Monter l'application

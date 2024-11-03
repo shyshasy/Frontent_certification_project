@@ -1,6 +1,6 @@
 <template>
   <div class="auth-container">
-    <h2 class="text-center mb-4">{{ $t('login.title') }}</h2>
+    <h2 class="text-center mb-4">Connexion</h2>
     <form @submit.prevent="handleLogin">
       <div class="form-group">
         <div class="input-icon">
@@ -8,7 +8,7 @@
             type="email"
             v-model="email"
             class="form-control"
-            :placeholder="$t('login.email_placeholder')"
+            placeholder="Email"
             required
           />
           <i class="fas fa-envelope"></i>
@@ -20,65 +20,51 @@
             type="password"
             v-model="password"
             class="form-control"
-            :placeholder="$t('login.password_placeholder')"
+            placeholder="Mot de passe"
             required
           />
           <i class="fas fa-lock"></i>
         </div>
       </div>
-      <button type="submit" class="btn btn-primary btn-block">{{ $t('login.submit') }}</button>
-      <div class="text-center mt-3">
-        <router-link class="register-link" to="/register">{{ $t('login.register_link') }}</router-link>
-      </div>
+      <button type="submit" class="btn btn-primary btn-block">Se connecter</button>
+      <div v-if="errorMessage" class="alert alert-danger mt-3">{{ errorMessage }}</div>
     </form>
-    <div v-if="errorMessage" class="alert alert-danger mt-3">{{ errorMessage }}</div>
   </div>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      email: '',
-      password: '',
-      errorMessage: '',
-    };
-  },
-  methods: {
-    async handleLogin() {
-      try {
-        console.log('Attempting login with', this.email, this.password);
+<script setup>
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 
-        // Simulate an API call to your backend
-        const response = await fetch('/api/login', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            email: this.email,
-            password: this.password,
-          }),
-        });
+const email = ref('');
+const password = ref('');
+const errorMessage = ref('');
+const router = useRouter();
 
-        if (response.ok) {
-          const data = await response.json();
-          console.log('Login successful:', data);
+const handleLogin = async () => {
+  try {
+    const response = await fetch('http://localhost:3002/api/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email: email.value, password: password.value }),
+    });
 
-          // Redirect to the dashboard or another page
-          this.$router.push('/dashboard');
-        } else {
-          // Handle failed login
-          const errorData = await response.json();
-          this.errorMessage = errorData.message || this.$t('login.invalid_credentials');
-        }
-      } catch (error) {
-        this.errorMessage = this.$t('login.error_occurred');
-        console.error('Login error:', error);
-      }
-    },
-  },
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || 'Erreur de connexion');
+    }
+
+    const data = await response.json();
+    localStorage.setItem('user', JSON.stringify({ email: email.value }));
+    router.push('/dashboard');
+  } catch (error) {
+    errorMessage.value = 'Une erreur est survenue lors de la connexion. Détails : ' + error.message;
+    console.error('Erreur de connexion :', error);
+  }
 };
+
 </script>
 
 <style scoped>
@@ -91,7 +77,6 @@ export default {
   background: linear-gradient(135deg, #007bff, #00c6ff);
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
   animation: fadeIn 0.5s ease-in-out;
-  transition: background-color 0.3s ease;
 }
 
 h2 {
@@ -110,7 +95,6 @@ h2 {
 
 .input-icon input {
   padding-left: 40px;
-  transition: all 0.3s ease;
   border: none;
   border-radius: 5px;
   width: 100%;
@@ -126,11 +110,11 @@ h2 {
 
 .btn {
   border-radius: 5px;
-  transition: background-color 0.3s ease;
   background: #5ab1ff;
   color: white;
   padding: 10px 20px;
   border: none;
+  transition: background-color 0.3s;
 }
 
 .btn:hover {
@@ -144,8 +128,6 @@ h2 {
 .register-link {
   color: #fff;
   font-weight: 600;
-  text-decoration: none;
-  transition: color 0.3s ease;
 }
 
 .register-link:hover {

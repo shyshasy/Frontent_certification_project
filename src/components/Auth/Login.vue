@@ -29,6 +29,17 @@
       <button type="submit" class="btn btn-primary btn-block">Se connecter</button>
       <div v-if="errorMessage" class="alert alert-danger mt-3">{{ errorMessage }}</div>
     </form>
+
+    <!-- Lien pour "Mot de passe oublié" -->
+    <div class="text-center mt-4">
+      <a @click="navigateToResetPassword" class="forgot-password-link">Mot de passe oublié ?</a>
+    </div>
+
+    <!-- Lien pour "S'inscrire" -->
+    <div class="text-center mt-2">
+      <span class="register-link">Pas encore de compte ?</span>
+      <a @click="navigateToRegister" class="register-link">S'inscrire</a>
+    </div>
   </div>
 </template>
 
@@ -41,6 +52,7 @@ const password = ref('');
 const errorMessage = ref('');
 const router = useRouter();
 
+// Fonction de gestion de la connexion
 const handleLogin = async () => {
   try {
     const response = await fetch('http://localhost:3002/api/login', {
@@ -65,6 +77,15 @@ const handleLogin = async () => {
   }
 };
 
+// Fonction pour rediriger vers "Mot de passe oublié"
+const navigateToResetPassword = () => {
+  router.push('/reset-password');
+};
+
+// Fonction pour rediriger vers "S'inscrire"
+const navigateToRegister = () => {
+  router.push('/register');
+};
 </script>
 
 <style scoped>
@@ -125,12 +146,13 @@ h2 {
   border-radius: 5px;
 }
 
-.register-link {
+/* Styles pour les liens supplémentaires */
+.forgot-password-link, .register-link {
   color: #fff;
-  font-weight: 600;
+  cursor: pointer;
 }
 
-.register-link:hover {
+.forgot-password-link:hover, .register-link:hover {
   color: #ffeb3b;
 }
 

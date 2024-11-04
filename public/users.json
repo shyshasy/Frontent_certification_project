@@ -1,0 +1,86 @@
+[
+    {
+        "email": "test@example.com",
+        "password": "password123"
+    },
+    {
+        "email": "user1@example.com",
+        "password": "mypassword1"
+    },
+    {
+        "email": "user2@example.com",
+        "password": "mypassword2"
+    },
+    {
+        "email": "user3@example.com",
+        "password": "mypassword3"
+    },
+    {
+        "email": "user4@example.com",
+        "password": "mypassword4"
+    },
+    {
+        "email": "user5@example.com",
+        "password": "mypassword5"
+    },
+    {
+        "email": "user6@example.com",
+        "password": "mypassword6"
+    },
+    {
+        "email": "user7@example.com",
+        "password": "mypassword7"
+    },
+    {
+        "email": "user8@example.com",
+        "password": "mypassword8"
+    },
+    {
+        "email": "user9@example.com",
+        "password": "mypassword9"
+    },
+    {
+        "email": "user10@example.com",
+        "password": "mypassword10"
+    },
+    {
+        "email": "user11@example.com",
+        "password": "mypassword11"
+    },
+    {
+        "email": "user12@example.com",
+        "password": "mypassword12"
+    },
+    {
+        "email": "user13@example.com",
+        "password": "mypassword13"
+    },
+    {
+        "email": "user14@example.com",
+        "password": "mypassword14"
+    },
+    {
+        "email": "user15@example.com",
+        "password": "mypassword15"
+    },
+    {
+        "email": "user16@example.com",
+        "password": "mypassword16"
+    },
+    {
+        "email": "user17@example.com",
+        "password": "mypassword17"
+    },
+    {
+        "email": "user18@example.com",
+        "password": "mypassword18"
+    },
+    {
+        "email": "user19@example.com",
+        "password": "mypassword19"
+    },
+    {
+        "email": "shyshasy@gmail.com",
+        "password": "securepassword"
+    }
+]

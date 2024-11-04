@@ -3,7 +3,8 @@ import Dashboard from '../components/Dashboard.vue';
 import Home from '../components/Layout/Home.vue'; 
 import Login from '../components/Auth/Login.vue'; 
 import Register from '../components/Auth/Register.vue'; 
-import UserProfile from '../components/User/UserProfile.vue'; 
+import ResetPassword from '../components/Auth/ResetPassword.vue'; // Importation de ResetPassword
+// import UserProfile from '../components/User/UserProfile.vue'; 
 import QueueManagement from '../components/QueueManagement.vue'; 
 
 const routes = [
@@ -11,11 +12,13 @@ const routes = [
   { path: '/home', component: Home, meta: { requiresAuth: true } },
   { path: '/login', component: Login },
   { path: '/register', component: Register },
-  { path: '/user-profile', component: UserProfile, meta: { requiresAuth: true } },
+  { path: '/reset-password', component: ResetPassword }, // Route pour la réinitialisation du mot de passe
+  // { path: '/user-profile', component: UserProfile, meta: { requiresAuth: true } },
   { path: '/queue', component: QueueManagement, meta: { requiresAuth: true } },
-  { path: '/', redirect: '/login' },
+  { path: '/', redirect: '/login' }, // Redirige vers la page de connexion par défaut
 ];
 
+// Création du routeur
 const router = createRouter({
   history: createWebHistory(),
   routes,
@@ -23,25 +26,26 @@ const router = createRouter({
 
 // Protection des routes
 router.beforeEach((to, from, next) => {
+  // Vérifie si la route nécessite une authentification
   if (to.matched.some(record => record.meta.requiresAuth)) {
-    const userData = localStorage.getItem('user');
+    const userData = localStorage.getItem('user'); // Récupération des données utilisateur du localStorage
     if (!userData) {
-      next({ path: '/login' }); // Redirigez vers la page de connexion
+      next({ path: '/login' }); // Redirige vers la page de connexion si aucune donnée utilisateur
     } else {
       try {
-        const user = JSON.parse(userData);
+        const user = JSON.parse(userData); // Essaie de parser les données utilisateur
         if (user) {
-          next(); // Laissez passer la navigation
+          next(); // Laisse passer la navigation si l'utilisateur est valide
         } else {
-          next({ path: '/login' }); // Redirigez vers la page de connexion si l'utilisateur n'est pas valide
+          next({ path: '/login' }); // Redirige vers la page de connexion si l'utilisateur n'est pas valide
         }
       } catch (error) {
-        console.error("Erreur de parsing des données utilisateur :", error);
-        next({ path: '/login' }); // En cas d'erreur de parsing, redirigez vers la connexion
+        console.error("Erreur de parsing des données utilisateur :", error); // Gère les erreurs de parsing
+        next({ path: '/login' }); // En cas d'erreur de parsing, redirige vers la connexion
       }
     }
   } else {
-    next(); // Laissez passer la navigation
+    next(); // Laisse passer la navigation si aucune authentification n'est requise
   }
 });
 

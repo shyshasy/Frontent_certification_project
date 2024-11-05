@@ -13,20 +13,61 @@
         <section class="features">
             <h2>Fonctionnalités Clés</h2>
             <div class="feature-container">
-                <div class="feature">
-                    <i class="fa fa-clock fa-3x"></i>
-                    <h3>Gestion du Temps</h3>
-                    <p>Optimisez le temps d'attente pour vos clients.</p>
+                <div class="feature-card">
+                    <div class="feature">
+                        <i class="fas fa-clock fa-3x feature-icon"></i> <!-- Icône pour Gestion du Temps -->
+                        <h3>Gestion du Temps</h3>
+                        <p>Optimisez le temps d'attente pour vos clients.</p>
+                    </div>
                 </div>
-                <div class="feature">
-                    <i class="fa fa-users fa-3x"></i>
-                    <h3>Interaction Client</h3>
-                    <p>Communiquez facilement avec vos clients.</p>
+                <div class="feature-card">
+                    <div class="feature">
+                        <i class="fas fa-users fa-3x feature-icon"></i> <!-- Icône pour Interaction Client -->
+                        <h3>Interaction Client</h3>
+                        <p>Communiquez facilement avec vos clients.</p>
+                    </div>
                 </div>
-                <div class="feature">
-                    <i class="fa fa-chart-line fa-3x"></i>
-                    <h3>Statistiques</h3>
-                    <p>Analysez les performances de votre service.</p>
+                <div class="feature-card">
+                    <div class="feature">
+                        <i class="fas fa-chart-bar fa-3x feature-icon"></i> <!-- Icône pour Statistiques -->
+                        <h3>Statistiques</h3>
+                        <p>Analysez les performances de votre service.</p>
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature">
+                        <i class="fas fa-mobile-alt fa-3x feature-icon"></i> <!-- Icône pour Accessibilité Mobile -->
+                        <h3>Accessibilité Mobile</h3>
+                        <p>Gérez votre file d'attente depuis n'importe où.</p>
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature">
+                        <i class="fas fa-cogs fa-3x feature-icon"></i> <!-- Icône pour Personnalisation -->
+                        <h3>Personnalisation</h3>
+                        <p>Adaptez la plateforme à vos besoins spécifiques.</p>
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature">
+                        <i class="fas fa-bell fa-3x feature-icon"></i> <!-- Icône pour Notifications -->
+                        <h3>Notifications</h3>
+                        <p>Recevez des alertes en temps réel.</p>
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature">
+                        <i class="fas fa-shield-alt fa-3x feature-icon"></i> <!-- Icône pour Sécurité -->
+                        <h3>Sécurité</h3>
+                        <p>Protégez les données de vos clients.</p>
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature">
+                        <i class="fas fa-comments fa-3x feature-icon"></i> <!-- Icône pour Support Client -->
+                        <h3>Support Client</h3>
+                        <p>Assistance disponible à tout moment.</p>
+                    </div>
                 </div>
             </div>
         </section>
@@ -41,7 +82,7 @@
                     <h4>Marie Dupont</h4>
                 </div>
                 <div class="testimonial">
-                    <img src="/public/User2.webp" alt="Utilisateur 1" />
+                    <img src="/public/User2.webp" alt="Utilisateur 2" />
                     <p>"Grâce à cette application, j'ai pu réduire le temps d'attente de mes clients."</p>
                     <h4>Jean Martin</h4>
                 </div>
@@ -51,7 +92,7 @@
         <!-- Appel à l'Action -->
         <footer class="footer">
             <p>Prêt à transformer votre gestion de file d'attente?</p>
-            <router-link class="btn btn-secondary" to="/register">Créer un Compte</router-link>
+            <router-link class="btn btn-register" to="/register">Créer un Compte</router-link>
         </footer>
     </div>
 </template>
@@ -73,6 +114,7 @@ export default {};
     color: white;
     text-align: center;
     position: relative;
+    padding: 20px; /* Ajout d'un rembourrage */
 }
 
 .hero::after {
@@ -90,9 +132,34 @@ export default {};
 }
 
 .btn {
-    padding: 10px 20px;
+    padding: 12px 25px;
     border-radius: 5px;
     font-size: 18px;
+    transition: background 0.3s ease, transform 0.3s ease; /* Effet de transition */
+}
+
+.btn-primary {
+    background-color: #007bff; /* Couleur bleue */
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3; /* Couleur au survol */
+    transform: translateY(-2px); /* Léger effet de levée */
+}
+
+.btn-register {
+    color: white;
+    font-weight: bold; /* Mettre en gras */
+    font-size: 20px; /* Taille de police plus grande */
+    padding: 15px 30px; /* Plus de rembourrage */
+    border-radius: 25px; /* Bordure arrondie */
+}
+
+.btn-register:hover {
+    background-color: hsla(244, 92%, 49%, 0.349); /* Couleur au survol */
+    border: 2px solid #4f09f5; /* Bordure au survol */
+    transform: translateY(-2px); /* Léger effet de levée */
 }
 
 .features, .testimonials {
@@ -105,18 +172,28 @@ export default {};
 }
 
 .feature-container {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Grille flexible */
+    gap: 20px; /* Espace entre les cartes */
+    justify-items: center; /* Centrer les cartes */
 }
 
-.feature {
-    margin: 20px;
+.feature-card {
     padding: 20px;
     background: #f9f9f9;
     border-radius: 10px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    width: 300px;
+    transition: transform 0.2s; /* Effet de transition */
+    width: 100%; /* Rendre la carte responsive */
+}
+
+.feature-card:hover {
+    transform: scale(1.05); /* Légère augmentation au survol */
+}
+
+.feature-icon {
+    color: #007bff; /* Couleur des icônes */
+    margin-bottom: 15px; /* Espacement sous l'icône */
 }
 
 .testimonial-container {
@@ -133,18 +210,27 @@ export default {};
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     width: 300px;
     text-align: center;
+    transition: transform 0.2s; /* Effet de transition */
+}
+
+.testimonial:hover {
+    transform: scale(1.05); /* Légère augmentation au survol */
 }
 
 .testimonial img {
     width: 80px;
+    height: 80px; /* Ajout d'une hauteur fixe pour centrer l'image */
     border-radius: 50%;
     margin-bottom: 15px;
+    display: block; /* Centrer l'image dans le conteneur */
+    margin-left: auto; /* Centrer horizontalement */
+    margin-right: auto; /* Centrer horizontalement */
 }
 
 .footer {
     text-align: center;
     padding: 30px;
-    background: #007bff;
+    background: #007bff; /* Couleur de fond du footer */
     color: white;
 }
 

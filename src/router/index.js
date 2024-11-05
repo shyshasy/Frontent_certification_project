@@ -6,6 +6,7 @@ import Register from '../components/Auth/Register.vue';
 import ResetPassword from '../components/Auth/ResetPassword.vue'; // Importation de ResetPassword
 // import UserProfile from '../components/User/UserProfile.vue'; 
 import QueueManagement from '../components/QueueManagement.vue'; 
+import EvaluationManager from '../components/EvaluationManager.vue';
 
 const routes = [
   { path: '/dashboard', component: Dashboard, meta: { requiresAuth: true } },
@@ -15,6 +16,7 @@ const routes = [
   { path: '/reset-password', component: ResetPassword }, // Route pour la réinitialisation du mot de passe
   // { path: '/user-profile', component: UserProfile, meta: { requiresAuth: true } },
   { path: '/queue', component: QueueManagement, meta: { requiresAuth: true } },
+  { path: '/evaluation-manager', component: EvaluationManager},
   { path: '/', redirect: '/login' }, // Redirige vers la page de connexion par défaut
 ];
 

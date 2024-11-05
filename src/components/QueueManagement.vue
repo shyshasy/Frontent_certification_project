@@ -2,7 +2,7 @@
     <div class="container mt-5">
         <h2 class="text-center mb-4">Gestion des Files d'Attente</h2>
 
-        <!-- Formulaire d'ajout de file d'attente -->
+      
         <form @submit.prevent="addQueue" class="mb-4 shadow p-4 rounded bg-light">
             <h4>Ajouter une File d'Attente</h4>
             <div class="row">
@@ -18,7 +18,7 @@
             </div>
         </form>
 
-        <!-- Liste des files d'attente -->
+       
         <div class="row">
             <div class="col-md-6" v-for="queue in queues" :key="queue.id">
                 <div class="card mb-3 shadow">
@@ -37,7 +37,7 @@
             </div>
         </div>
 
-        <!-- Formulaire d'édition de file d'attente -->
+       
         <div v-if="editingQueue" class="mt-4">
             <h3>Modifier la File d'Attente</h3>
             <form @submit.prevent="updateQueue" class="mb-3 shadow p-4 rounded bg-light">
@@ -56,7 +56,7 @@
             </form>
         </div>
 
-        <!-- Gestion des tickets -->
+      
         <div class="mt-5">
             <h3>Prise de Ticket</h3>
             <form @submit.prevent="takeTicket" class="mb-4 shadow p-4 rounded bg-light">
@@ -73,7 +73,7 @@
                 </div>
             </form>
 
-            <!-- Liste des tickets -->
+         
             <h4 class="mt-4">Tickets en Attente</h4>
             <ul class="list-group">
                 <li v-for="ticket in tickets" :key="ticket.id" class="list-group-item d-flex justify-content-between align-items-center">
@@ -89,7 +89,6 @@
             </ul>
         </div>
 
-        <!-- Formulaire d'édition de ticket -->
         <div v-if="editingTicket" class="mt-4">
             <h3>Modifier le Ticket</h3>
             <form @submit.prevent="updateTicket" class="mb-3 shadow p-4 rounded bg-light">
@@ -108,7 +107,7 @@
             </form>
         </div>
 
-        <!-- Gestion des guichets -->
+       
         <div class="mt-5">
             <h3>Gestion des Guichets</h3>
             <form @submit.prevent="addCounter" class="mb-4 shadow p-4 rounded bg-light">
@@ -126,7 +125,7 @@
                 </div>
             </form>
 
-            <!-- Liste des guichets -->
+           
             <h4 class="mt-4">Guichets Enregistrés</h4>
             <ul class="list-group">
                 <li v-for="counter in counters" :key="counter.id" class="list-group-item d-flex justify-content-between align-items-center">
@@ -141,7 +140,7 @@
             </ul>
         </div>
 
-        <!-- Formulaire d'édition de guichet -->
+       
         <div v-if="editingCounter" class="mt-4">
             <h3>Modifier le Guichet</h3>
             <form @submit.prevent="updateCounter" class="mb-3 shadow p-4 rounded bg-light">
@@ -182,7 +181,7 @@ export default {
     methods: {
         addQueue() {
             const newQueue = {
-                id: Date.now(), // Simulating ID generation
+                id: Date.now(),
                 name: this.newQueueName,
                 size: this.newQueueSize,
             };
@@ -191,13 +190,13 @@ export default {
             this.newQueueSize = '';
         },
         editQueue(queue) {
-            this.editingQueue = { ...queue }; // Clone for editing
+            this.editingQueue = { ...queue }; 
         },
         updateQueue() {
             const index = this.queues.findIndex(q => q.id === this.editingQueue.id);
             if (index !== -1) {
                 this.queues[index] = this.editingQueue;
-                this.editingQueue = null; // Reset
+                this.editingQueue = null; 
             }
         },
         removeQueue(id) {
@@ -209,21 +208,21 @@ export default {
                 id: Date.now(),
                 number: ticketNumber,
                 queueId: this.selectedQueue,
-                createdBy: 'Utilisateur', // Simulated user
+                createdBy: 'Utilisateur', 
                 issueDate: new Date().toLocaleString(),
                 status: 'En attente',
             };
             this.tickets.push(newTicket);
-            this.selectedQueue = null; // Reset selection
+            this.selectedQueue = null; 
         },
         editTicket(ticket) {
-            this.editingTicket = { ...ticket }; // Clone for editing
+            this.editingTicket = { ...ticket }; 
         },
         updateTicket() {
             const index = this.tickets.findIndex(t => t.id === this.editingTicket.id);
             if (index !== -1) {
                 this.tickets[index] = this.editingTicket;
-                this.editingTicket = null; // Reset
+                this.editingTicket = null; 
             }
         },
         removeTicket(id) {
@@ -234,20 +233,20 @@ export default {
                 id: Date.now(),
                 name: this.newCounterName,
                 manager: this.newCounterManager,
-                status: 'Actif', // Default status
+                status: 'Actif', 
             };
             this.counters.push(newCounter);
             this.newCounterName = '';
             this.newCounterManager = '';
         },
         editCounter(counter) {
-            this.editingCounter = { ...counter }; // Clone for editing
+            this.editingCounter = { ...counter }; 
         },
         updateCounter() {
             const index = this.counters.findIndex(c => c.id === this.editingCounter.id);
             if (index !== -1) {
                 this.counters[index] = this.editingCounter;
-                this.editingCounter = null; // Reset
+                this.editingCounter = null; 
             }
         },
         removeCounter(id) {
@@ -265,7 +264,7 @@ export default {
         getQueueProgress(queue) {
             const totalSize = queue.size;
             const totalTickets = this.tickets.filter(ticket => ticket.queueId === queue.id).length;
-            return (totalTickets / totalSize) * 100 || 0; // Avoid division by zero
+            return (totalTickets / totalSize) * 100 || 0;
         },
         getQueueName(queueId) {
             const queue = this.queues.find(q => q.id === queueId);
@@ -293,10 +292,10 @@ export default {
 }
 
 .btn:hover {
-    background-color: #0056b3; /* Darken button on hover */
+    background-color: #0056b3; 
 }
 
 .progress {
-    height: 1.5rem; /* Increase progress bar height */
+    height: 1.5rem; 
 }
 </style>

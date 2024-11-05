@@ -64,73 +64,54 @@
 </template>
 
 <script>
-import { ref } from 'vue';
-import { useRouter } from 'vue-router';
+import { createStore } from 'vuex';
 
-export default {
-  setup() {
-    const router = useRouter();
-
-    // Déclaration des variables réactives
-    const name = ref('');
-    const email = ref('');
-    const phone = ref('');
-    const password = ref('');
-    const errorMessage = ref('');
-    const successMessage = ref('');
-    const isLoading = ref(false);
-
-    // Méthode d'inscription
-    const handleRegister = () => {
-      errorMessage.value = ''; // Réinitialiser le message d'erreur
-      successMessage.value = ''; // Réinitialiser le message de succès
-      isLoading.value = true; // Afficher l'indicateur de chargement
-
-      // Vérifier si l'utilisateur est déjà inscrit
-      const users = JSON.parse(localStorage.getItem('users')) || [];
-      const userExists = users.find(user => user.email === email.value);
+export const registrationStore = createStore({
+  state: {
+    users: JSON.parse(localStorage.getItem('users')) || [],
+    isLoading: false,
+    errorMessage: '',
+    successMessage: '',
+  },
+  mutations: {
+    ADD_USER(state, newUser) {
+      state.users.push(newUser);
+      localStorage.setItem('users', JSON.stringify(state.users));
+    },
+    SET_LOADING(state, isLoading) {
+      state.isLoading = isLoading;
+    },
+    SET_ERROR_MESSAGE(state, message) {
+      state.errorMessage = message;
+    },
+    SET_SUCCESS_MESSAGE(state, message) {
+      state.successMessage = message;
+    },
+  },
+  actions: {
+    registerUser({ commit, state }, newUser) {
+      commit('SET_LOADING', true);
+      const userExists = state.users.find(user => user.email === newUser.email);
 
       if (userExists) {
-        errorMessage.value = 'Cet email est déjà utilisé.';
-        isLoading.value = false;
+        commit('SET_ERROR_MESSAGE', 'Cet email est déjà utilisé.');
+        commit('SET_LOADING', false);
         return;
       }
 
-      // Créer un nouvel utilisateur
-      const newUser = {
-        name: name.value,
-        email: email.value,
-        phone: phone.value,
-        password: password.value,
-      };
-
-      // Ajouter le nouvel utilisateur à la liste des utilisateurs
-      users.push(newUser);
-      localStorage.setItem('users', JSON.stringify(users));
-
-      successMessage.value = 'Inscription réussie ! Vous pouvez maintenant vous connecter.';
-      
-      // Rediriger vers la page de connexion après l'inscription réussie
-      setTimeout(() => {
-        router.push('/login');
-      }, 2000); // Délai avant la redirection
-
-      isLoading.value = false; // Masquer l'indicateur de chargement
-    };
-
-    // Retourne les variables et méthodes nécessaires au template
-    return {
-      name,
-      email,
-      phone,
-      password,
-      errorMessage,
-      successMessage,
-      isLoading,
-      handleRegister,
-    };
+      commit('ADD_USER', newUser);
+      commit('SET_SUCCESS_MESSAGE', 'Inscription réussie ! Vous pouvez maintenant vous connecter.');
+      commit('SET_LOADING', false);
+    },
   },
-};
+  getters: {
+    users: state => state.users,
+    isLoading: state => state.isLoading,
+    errorMessage: state => state.errorMessage,
+    successMessage: state => state.successMessage,
+  },
+});
+
 </script>
 
 <style scoped>

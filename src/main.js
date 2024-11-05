@@ -3,6 +3,7 @@ import App from './App.vue';
 import router from './router';
 import 'bootstrap/dist/css/bootstrap.min.css'; // Styles Bootstrap
 import 'font-awesome/css/font-awesome.css'; // Styles Font Awesome
+import './assets/main.css';
 
 // Importer vue-i18n et les fichiers de traduction
 import { createI18n } from 'vue-i18n';

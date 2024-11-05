@@ -9,6 +9,7 @@ import QueueManagement from '../components/QueueManagement.vue';
 import EvaluationManager from '../components/EvaluationManager.vue';
 import Utilisateur from '../components/Utilisateur.vue';
 import Modal from '../components/Modal.vue'
+import Header from '../components/Layout/Header.vue';
 
 const routes = [
   { path: '/dashboard', component: Dashboard, meta: { requiresAuth: true } },
@@ -20,6 +21,7 @@ const routes = [
   { path: '/queue', component: QueueManagement, meta: { requiresAuth: true } },
   { path: '/evaluation-manager', component: EvaluationManager},
   { path: '/utilisateur', component: Utilisateur },
+  { path: '/header', component: Utilisateur },
 
   { path: '/modal', component:Modal},
   { path: '/', redirect: '/login' }, // Redirige vers la page de connexion par défaut

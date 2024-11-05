@@ -42,6 +42,11 @@
             </router-link>
           </li>
           <li class="nav-item">
+            <router-link class="nav-link" to="/utilisateur">
+              <i class="fa fa-list"></i> Utilisateur
+            </router-link>
+          </li>
+          <li class="nav-item">
             <router-link class="nav-link" to="/evaluation-manager">
               <i class="fa fa-ticket-alt"></i> Evaluation
             </router-link>

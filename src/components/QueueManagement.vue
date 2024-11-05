@@ -2,7 +2,6 @@
     <div class="container mt-5">
         <h2 class="text-center mb-4">Gestion des Files d'Attente</h2>
 
-      
         <form @submit.prevent="addQueue" class="mb-4 shadow p-4 rounded bg-light">
             <h4>Ajouter une File d'Attente</h4>
             <div class="row">
@@ -18,7 +17,6 @@
             </div>
         </form>
 
-       
         <div class="row">
             <div class="col-md-6" v-for="queue in queues" :key="queue.id">
                 <div class="card mb-3 shadow">
@@ -37,7 +35,6 @@
             </div>
         </div>
 
-       
         <div v-if="editingQueue" class="mt-4">
             <h3>Modifier la File d'Attente</h3>
             <form @submit.prevent="updateQueue" class="mb-3 shadow p-4 rounded bg-light">
@@ -56,7 +53,6 @@
             </form>
         </div>
 
-      
         <div class="mt-5">
             <h3>Prise de Ticket</h3>
             <form @submit.prevent="takeTicket" class="mb-4 shadow p-4 rounded bg-light">
@@ -73,7 +69,6 @@
                 </div>
             </form>
 
-         
             <h4 class="mt-4">Tickets en Attente</h4>
             <ul class="list-group">
                 <li v-for="ticket in tickets" :key="ticket.id" class="list-group-item d-flex justify-content-between align-items-center">
@@ -107,7 +102,6 @@
             </form>
         </div>
 
-       
         <div class="mt-5">
             <h3>Gestion des Guichets</h3>
             <form @submit.prevent="addCounter" class="mb-4 shadow p-4 rounded bg-light">
@@ -125,7 +119,6 @@
                 </div>
             </form>
 
-           
             <h4 class="mt-4">Guichets Enregistrés</h4>
             <ul class="list-group">
                 <li v-for="counter in counters" :key="counter.id" class="list-group-item d-flex justify-content-between align-items-center">
@@ -140,7 +133,6 @@
             </ul>
         </div>
 
-       
         <div v-if="editingCounter" class="mt-4">
             <h3>Modifier le Guichet</h3>
             <form @submit.prevent="updateCounter" class="mb-3 shadow p-4 rounded bg-light">
@@ -190,20 +182,33 @@ export default {
             this.newQueueSize = '';
         },
         editQueue(queue) {
-            this.editingQueue = { ...queue }; 
+            this.editingQueue = { ...queue };
         },
         updateQueue() {
-            const index = this.queues.findIndex(q => q.id === this.editingQueue.id);
+            const index = this.queues.findIndex(queue => queue.id === this.editingQueue.id);
             if (index !== -1) {
-                this.queues[index] = this.editingQueue;
-                this.editingQueue = null; 
+                this.queues.splice(index, 1, this.editingQueue);
+                this.editingQueue = null;
             }
         },
+        cancelEdit() {
+            this.editingQueue = null;
+        },
         removeQueue(id) {
-            this.queues = this.queues.filter(q => q.id !== id);
+            this.queues = this.queues.filter(queue => queue.id !== id);
+            this.tickets = this.tickets.filter(ticket => ticket.queueId !== id);
         },
         takeTicket() {
-            const ticketNumber = this.tickets.length + 1;
+            const selectedQueue = this.queues.find(queue => queue.id === this.selectedQueue);
+            if (selectedQueue) {
+                const totalTickets = this.tickets.filter(ticket => ticket.queueId === selectedQueue.id).length;
+                if (totalTickets >= selectedQueue.size) {
+                    alert('La file d\'attente est pleine, impossible de prendre un nouveau ticket.');
+                    return;
+                }
+            }
+
+            const ticketNumber = this.tickets.length + 1; // Consider a more robust method for ticket numbers
             const newTicket = {
                 id: Date.now(),
                 number: ticketNumber,
@@ -215,87 +220,65 @@ export default {
             this.tickets.push(newTicket);
             this.selectedQueue = null; 
         },
+        getQueueProgress(queue) {
+            const totalTickets = this.tickets.filter(ticket => ticket.queueId === queue.id).length;
+            return (totalTickets / queue.size) * 100;
+        },
+        getQueueName(queueId) {
+            const queue = this.queues.find(queue => queue.id === queueId);
+            return queue ? queue.name : 'Inconnu';
+        },
+        getTicketPosition(ticket) {
+            const ticketsInQueue = this.tickets.filter(t => t.queueId === ticket.queueId);
+            return ticketsInQueue.indexOf(ticket) + 1;
+        },
         editTicket(ticket) {
-            this.editingTicket = { ...ticket }; 
+            this.editingTicket = { ...ticket };
         },
         updateTicket() {
-            const index = this.tickets.findIndex(t => t.id === this.editingTicket.id);
+            const index = this.tickets.findIndex(ticket => ticket.id === this.editingTicket.id);
             if (index !== -1) {
-                this.tickets[index] = this.editingTicket;
-                this.editingTicket = null; 
+                this.tickets.splice(index, 1, this.editingTicket);
+                this.editingTicket = null;
             }
         },
         removeTicket(id) {
-            this.tickets = this.tickets.filter(t => t.id !== id);
+            this.tickets = this.tickets.filter(ticket => ticket.id !== id);
         },
         addCounter() {
             const newCounter = {
                 id: Date.now(),
                 name: this.newCounterName,
                 manager: this.newCounterManager,
-                status: 'Actif', 
+                status: 'Actif',
             };
             this.counters.push(newCounter);
             this.newCounterName = '';
             this.newCounterManager = '';
         },
         editCounter(counter) {
-            this.editingCounter = { ...counter }; 
+            this.editingCounter = { ...counter };
         },
         updateCounter() {
-            const index = this.counters.findIndex(c => c.id === this.editingCounter.id);
+            const index = this.counters.findIndex(counter => counter.id === this.editingCounter.id);
             if (index !== -1) {
-                this.counters[index] = this.editingCounter;
-                this.editingCounter = null; 
+                this.counters.splice(index, 1, this.editingCounter);
+                this.editingCounter = null;
             }
-        },
-        removeCounter(id) {
-            this.counters = this.counters.filter(c => c.id !== id);
-        },
-        cancelEdit() {
-            this.editingQueue = null;
-        },
-        cancelTicketEdit() {
-            this.editingTicket = null;
         },
         cancelCounterEdit() {
             this.editingCounter = null;
         },
-        getQueueProgress(queue) {
-            const totalSize = queue.size;
-            const totalTickets = this.tickets.filter(ticket => ticket.queueId === queue.id).length;
-            return (totalTickets / totalSize) * 100 || 0;
-        },
-        getQueueName(queueId) {
-            const queue = this.queues.find(q => q.id === queueId);
-            return queue ? queue.name : 'Inconnu';
-        },
-        getTicketPosition(ticket) {
-            const position = this.tickets.filter(t => t.queueId === ticket.queueId).indexOf(ticket) + 1;
-            return position;
+        removeCounter(id) {
+            this.counters = this.counters.filter(counter => counter.id !== id);
         },
     },
 };
 </script>
 
 <style scoped>
-.card {
-    transition: transform 0.2s;
-}
-
-.card:hover {
-    transform: scale(1.02);
-}
-
-.btn {
-    transition: background-color 0.3s;
-}
-
-.btn:hover {
-    background-color: #0056b3; 
-}
-
-.progress {
-    height: 1.5rem; 
+.container {
+    max-width: 800px;
+    margin: 0 auto;
 }
 </style>

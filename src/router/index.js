@@ -7,6 +7,8 @@ import ResetPassword from '../components/Auth/ResetPassword.vue'; // Importation
 // import UserProfile from '../components/User/UserProfile.vue'; 
 import QueueManagement from '../components/QueueManagement.vue'; 
 import EvaluationManager from '../components/EvaluationManager.vue';
+import Utilisateur from '../components/Utilisateur.vue';
+import Modal from '../components/Modal.vue'
 
 const routes = [
   { path: '/dashboard', component: Dashboard, meta: { requiresAuth: true } },
@@ -17,6 +19,9 @@ const routes = [
   // { path: '/user-profile', component: UserProfile, meta: { requiresAuth: true } },
   { path: '/queue', component: QueueManagement, meta: { requiresAuth: true } },
   { path: '/evaluation-manager', component: EvaluationManager},
+  { path: '/utilisateur', component: Utilisateur },
+
+  { path: '/modal', component:Modal},
   { path: '/', redirect: '/login' }, // Redirige vers la page de connexion par défaut
 ];
 

@@ -43,12 +43,18 @@
           </li>
           <li class="nav-item">
             <router-link class="nav-link" to="/utilisateur">
-              <i class="fa fa-list"></i> Utilisateur
+              <i class="fa fa-users"></i> Utilisateur
             </router-link>
           </li>
+
           <li class="nav-item">
             <router-link class="nav-link" to="/evaluation-manager">
               <i class="fa fa-ticket-alt"></i> Evaluation
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link class="nav-link" to="/dashboard">
+              <i class="fa fa-tachometer-alt"></i> Dashboard
             </router-link>
           </li>
         </ul>
@@ -98,6 +104,12 @@
 
 .navbar-nav .nav-item {
   margin-left: 1rem;
+  flex: 1; /* Ensure items take equal space */
+}
+
+.navbar-nav {
+  display: flex;
+  flex-wrap: wrap; /* Allow wrapping if necessary */
 }
 
 .nav-link {
@@ -109,11 +121,13 @@
   position: relative;
   padding: 0.5rem 1rem; /* Added padding for better spacing */
   border-radius: 5px; /* Rounded corners for the hover effect */
+  white-space: nowrap; /* Prevent text from breaking onto the next line */
+  overflow: hidden; /* Hide overflowed content */
+  text-overflow: ellipsis; /* Add ellipsis if text is too long */
 }
 
 .nav-link:hover {
   color: #ffd700 !important;
- 
   transform: scale(1.05);
   text-shadow: 0 0 10px rgba(255, 215, 0, 0.7), 0 0 20px rgba(255, 215, 0, 0.5);
 }
@@ -138,7 +152,6 @@
   left: 0;
 }
 
-
 .navbar-toggler-icon {
   background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30' fill='white'><path stroke='rgba(255, 255, 255, 0.5)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/></svg>");
 }
@@ -146,6 +159,10 @@
 @media (max-width: 768px) {
   .navbar-nav {
     text-align: center;
+    width: 100%;
+  }
+  .nav-item {
+    width: 100%; /* Make each item take up the full width */
   }
   .nav-link {
     padding: 0.5rem;

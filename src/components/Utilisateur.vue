@@ -151,9 +151,13 @@
         closeEditModal();
       };
   
+      // Nouvelle fonction pour confirmer la suppression
       const confirmDelete = (id) => {
-        utilisateurs.value = utilisateurs.value.filter(user => user.id !== id);
-        showNotification('Utilisateur supprimé avec succès !');
+        const isConfirmed = confirm("Êtes-vous sûr de vouloir supprimer cet utilisateur ?");
+        if (isConfirmed) {
+          utilisateurs.value = utilisateurs.value.filter(user => user.id !== id);
+          showNotification('Utilisateur supprimé avec succès !');
+        }
       };
   
       // Nouvelle fonction pour voir les détails de l'utilisateur
@@ -175,11 +179,12 @@
         submitAddForm,
         submitEditForm,
         confirmDelete,
-        viewUser, // Ajout de la fonction dans le retour
+        viewUser,
       };
     },
   };
   </script>
+  
   
   <style>
   .form-container {

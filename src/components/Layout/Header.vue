@@ -22,6 +22,11 @@
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto">
           <li class="nav-item">
+            <router-link class="nav-link" to="/dashboard">
+              <i class="fa fa-tachometer-alt"></i> Dashboard
+            </router-link>
+          </li>
+          <li class="nav-item">
             <router-link class="nav-link" to="/home">
               <i class="fa fa-home"></i> Home
             </router-link>
@@ -37,8 +42,8 @@
             </router-link>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link" to="/queue">
-              <i class="fa fa-list"></i> Queue Management
+            <router-link class="nav-link" to="/queue-management">
+              <i class="fa fa-list"></i> QueueManagement
             </router-link>
           </li>
           <li class="nav-item">
@@ -50,11 +55,6 @@
           <li class="nav-item">
             <router-link class="nav-link" to="/evaluation-manager">
               <i class="fa fa-ticket-alt"></i> Evaluation
-            </router-link>
-          </li>
-          <li class="nav-item">
-            <router-link class="nav-link" to="/dashboard">
-              <i class="fa fa-tachometer-alt"></i> Dashboard
             </router-link>
           </li>
         </ul>

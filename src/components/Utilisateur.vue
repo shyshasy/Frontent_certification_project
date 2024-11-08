@@ -1,184 +1,214 @@
 <template>
-    <div>
-      <h2 class="text-center">Gestion des Utilisateurs</h2>
-      <button class="btn btn-success mb-3" @click="openAddModal">Ajouter un Utilisateur</button>
-  
-      <!-- Message de confirmation -->
-      <div v-if="notification" class="alert alert-info">{{ notification }}</div>
-  
-      <!-- Tableau des utilisateurs -->
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th>Nom</th>
-            <th>Email</th>
-            <th>Rôle</th>
-            <th>Statut</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="utilisateur in utilisateurs" :key="utilisateur.id">
-            <td>{{ utilisateur.nom }}</td>
-            <td>{{ utilisateur.email }}</td>
-            <td>{{ utilisateur.role }}</td>
-            <td>{{ utilisateur.status }}</td>
-            <td>
-              <div class="button-group">
-                <button class="btn btn-primary me-2" @click="openEditModal(utilisateur)">Modifier</button>
-                <button class="btn btn-danger" @click="confirmDelete(utilisateur.id)">Supprimer</button>
-                <button class="btn btn-info" @click="viewUser(utilisateur)">Voir</button> <!-- Nouveau bouton -->
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-  
-      <!-- Modale pour ajouter un utilisateur -->
-      <Modal :isOpen="isAddModalOpen" title="Ajouter un Utilisateur" @close="closeAddModal">
-        <form @submit.prevent="submitAddForm" class="form-container">
-          <div class="form-grid">
-            <div class="form-left">
-              <input v-model="newForm.nom" placeholder="Nom" class="form-control" required />
-              <select v-model="newForm.role" class="form-control" required>
-                <option value="" disabled>Rôle</option>
-                <option value="admin">Administrateur</option>
-                <option value="user">Utilisateur</option>
-              </select>
+  <div>
+    <h2 class="text-center">Gestion des Utilisateurs</h2>
+    <button class="btn btn-success mb-3" @click="openAddModal">Ajouter un Utilisateur</button>
+
+    <!-- Message de confirmation -->
+    <div v-if="notification" class="alert alert-info">{{ notification }}</div>
+
+    <!-- Tableau des utilisateurs -->
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Nom</th>
+          <th>Email</th>
+          <th>Rôle</th>
+          <th>Statut</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="utilisateur in utilisateurs" :key="utilisateur.id">
+          <td>{{ utilisateur.nom }}</td>
+          <td>{{ utilisateur.email }}</td>
+          <td>{{ utilisateur.role }}</td>
+          <td>{{ utilisateur.status ? 'Actif' : 'Inactif' }}</td>
+          <td>
+            <div class="button-group">
+              <button class="btn btn-primary me-2" @click="openEditModal(utilisateur)">Modifier</button>
+              <button class="btn btn-danger" @click="confirmDelete(utilisateur.id)">Supprimer</button>
+              <button class="btn btn-info" @click="viewUser(utilisateur)">Voir</button>
             </div>
-            <div class="form-right">
-              <input v-model="newForm.email" placeholder="Email" type="email" class="form-control" required />
-              <select v-model="newForm.status" class="form-control" required>
-                <option value="" disabled>Statut</option>
-                <option value="actif">Actif</option>
-                <option value="inactif">Inactif</option>
-              </select>
-            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Modale pour ajouter un utilisateur -->
+    <Modal :isOpen="isAddModalOpen" title="Ajouter un Utilisateur" @close="closeAddModal">
+      <form @submit.prevent="submitAddForm" class="form-container">
+        <div class="form-grid">
+          <div class="form-left">
+            <input v-model="newForm.nom" placeholder="Nom" class="form-control" required />
+            <select v-model="newForm.role" class="form-control" required>
+              <option value="" disabled>Rôle</option>
+              <option value="admin">Administrateur</option>
+              <option value="client">Utilisateur</option>
+            </select>
           </div>
-          <input v-model="newForm.password" type="password" placeholder="Mot de passe" class="form-control mt-3" required />
-          <button type="submit" class="btn btn-primary mt-3">Ajouter</button>
-        </form>
-      </Modal>
-  
-      <!-- Modale pour modifier un utilisateur -->
-      <Modal :isOpen="isEditModalOpen" title="Modifier Utilisateur" @close="closeEditModal">
-        <form @submit.prevent="submitEditForm" class="form-container">
-          <div class="form-grid">
-            <div class="form-left">
-              <input v-model="editForm.nom" placeholder="Nom" class="form-control" required />
-              <select v-model="editForm.role" class="form-control" required>
-                <option value="admin">Administrateur</option>
-                <option value="user">Utilisateur</option>
-              </select>
-            </div>
-            <div class="form-right">
-              <input v-model="editForm.email" placeholder="Email" type="email" class="form-control" required />
-              <select v-model="editForm.status" class="form-control" required>
-                <option value="actif">Actif</option>
-                <option value="inactif">Inactif</option>
-              </select>
-            </div>
+          <div class="form-right">
+            <input v-model="newForm.email" placeholder="Email" type="email" class="form-control" required />
+            <select v-model="newForm.status" class="form-control" required>
+              <option value="" disabled>Statut</option>
+              <option :value="true">Actif</option>
+              <option :value="false">Inactif</option>
+            </select>
           </div>
-          <input v-model="editForm.password" type="password" placeholder="Mot de passe" class="form-control mt-3" required />
-          <button type="submit" class="btn btn-success mt-3">Sauvegarder</button>
-        </form>
-      </Modal>
-    </div>
-  </template>
+        </div>
+        <input v-model="newForm.password" type="password" placeholder="Mot de passe" class="form-control mt-3" required />
+        <button type="submit" class="btn btn-primary mt-3">Ajouter</button>
+      </form>
+    </Modal>
+
+    <!-- Modale pour modifier un utilisateur -->
+    <Modal :isOpen="isEditModalOpen" title="Modifier Utilisateur" @close="closeEditModal">
+      <form @submit.prevent="submitEditForm" class="form-container">
+        <div class="form-grid">
+          <div class="form-left">
+            <input v-model="editForm.nom" placeholder="Nom" class="form-control" required />
+            <select v-model="editForm.role" class="form-control" required>
+              <option value="admin">Administrateur</option>
+              <option value="client">Utilisateur</option>
+            </select>
+          </div>
+          <div class="form-right">
+            <input v-model="editForm.email" placeholder="Email" type="email" class="form-control" required />
+            <select v-model="editForm.status" class="form-control" required>
+              <option :value="true">Actif</option>
+              <option :value="false">Inactif</option>
+            </select>
+          </div>
+        </div>
+        <input v-model="editForm.password" type="password" placeholder="Mot de passe" class="form-control mt-3" required />
+        <button type="submit" class="btn btn-success mt-3">Sauvegarder</button>
+      </form>
+    </Modal>
+  </div>
+</template>
+
   
   <script>
-  import { ref } from 'vue';
-  import Modal from './Modal.vue';
-  
-  export default {
-    components: {
-      Modal,
-    },
-    setup() {
-      const utilisateurs = ref([
-        { id: 1, nom: 'Alice Dupont', email: 'alice@example.com', role: 'admin', status: 'actif' },
-        { id: 2, nom: 'Bob Martin', email: 'bob@example.com', role: 'user', status: 'inactif' },
-      ]);
-  
-      const isAddModalOpen = ref(false);
-      const isEditModalOpen = ref(false);
-      const newForm = ref({ nom: '', email: '', role: '', status: '', password: '' });
-      const editForm = ref({ nom: '', email: '', role: '', status: '', password: '' });
-      const selectedUserId = ref(null);
-      const notification = ref('');
-  
-      // Fonction pour gérer l'affichage temporaire des messages
-      const showNotification = (message) => {
-        notification.value = message;
-        setTimeout(() => {
-          notification.value = ''; // Efface le message après 3 secondes
-        }, 3000);
-      };
-  
-      const openAddModal = () => {
-        isAddModalOpen.value = true;
-      };
-  
-      const closeAddModal = () => {
-        isAddModalOpen.value = false;
-        newForm.value = { nom: '', email: '', role: '', status: '', password: '' };
-      };
-  
-      const openEditModal = (utilisateur) => {
-        selectedUserId.value = utilisateur.id;
-        editForm.value = { ...utilisateur };
-        isEditModalOpen.value = true;
-      };
-  
-      const closeEditModal = () => {
-        isEditModalOpen.value = false;
-        editForm.value = { nom: '', email: '', role: '', status: '', password: '' };
-      };
-  
-      const submitAddForm = () => {
-        const newUtilisateur = { ...newForm.value, id: Date.now() };
-        utilisateurs.value.push(newUtilisateur);
+import { ref } from 'vue';
+import axios from 'axios';
+import Modal from './Modal.vue';
+
+export default {
+  components: {
+    Modal,
+  },
+  setup() {
+    const utilisateurs = ref([]);
+    const isAddModalOpen = ref(false);
+    const isEditModalOpen = ref(false);
+    const newForm = ref({ nom: '', email: '', role: '', status: '', password: '' });
+    const editForm = ref({ nom: '', email: '', role: '', status: '', password: '' });
+    const selectedUserId = ref(null);
+    const notification = ref('');
+
+    // Fetch users from the backend
+    const fetchUsers = async () => {
+      try {
+        const response = await axios.get('http://localhost:5002/api/utilisateurs');
+        utilisateurs.value = response.data;
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    // Appeler fetchUsers sur le montage du composant pour charger les utilisateurs
+    fetchUsers();
+
+    const showNotification = (message) => {
+      notification.value = message;
+      setTimeout(() => {
+        notification.value = '';
+      }, 3000);
+    };
+
+    const openAddModal = () => {
+      isAddModalOpen.value = true;
+    };
+
+    const closeAddModal = () => {
+      isAddModalOpen.value = false;
+      newForm.value = { nom: '', email: '', role: '', status: '', password: '' };
+    };
+
+    const openEditModal = (utilisateur) => {
+      selectedUserId.value = utilisateur.id;
+      editForm.value = { ...utilisateur };
+      isEditModalOpen.value = true;
+    };
+
+    const closeEditModal = () => {
+      isEditModalOpen.value = false;
+      editForm.value = { nom: '', email: '', role: '', status: '', password: '' };
+    };
+
+    const submitAddForm = async () => {
+      try {
+        await axios.post('http://localhost:5002/api/utilisateurs', newForm.value);
         showNotification('Utilisateur ajouté avec succès !');
         closeAddModal();
-      };
-  
-      const submitEditForm = () => {
-        const index = utilisateurs.value.findIndex(user => user.id === selectedUserId.value);
-        if (index !== -1) {
-          utilisateurs.value[index] = { ...editForm.value };
-          showNotification('Utilisateur modifié avec succès !');
-        }
+        await fetchUsers(); // Rafraîchir les utilisateurs après l'ajout
+      } catch (error) {
+        console.error("Error in submitAddForm:", error);
+        showNotification("Erreur lors de l'ajout de l'utilisateur !");
+      }
+    };
+
+    const submitEditForm = async () => {
+      try {
+        await axios.put(
+          `http://localhost:5002/api/utilisateurs/${selectedUserId.value}`,
+          editForm.value
+        );
+        showNotification('Utilisateur modifié avec succès !');
         closeEditModal();
-      };
-  
-      const confirmDelete = (id) => {
-        utilisateurs.value = utilisateurs.value.filter(user => user.id !== id);
+        await fetchUsers(); // Rafraîchir les utilisateurs après la modification
+      } catch (error) {
+        console.error("Error in submitEditForm:", error);
+        showNotification("Erreur lors de la modification de l'utilisateur !");
+      }
+    };
+
+    const confirmDelete = async (id) => {
+      try {
+        const confirmation = window.confirm("Êtes-vous sûr de vouloir supprimer cet utilisateur ?");
+        if (!confirmation) return;
+
+        await axios.delete(`http://localhost:5002/api/utilisateurs/${id}`);
         showNotification('Utilisateur supprimé avec succès !');
-      };
-  
-      // Nouvelle fonction pour voir les détails de l'utilisateur
-      const viewUser = (utilisateur) => {
-        alert(`Détails de l'utilisateur :\nNom: ${utilisateur.nom}\nEmail: ${utilisateur.email}\nRôle: ${utilisateur.role}\nStatut: ${utilisateur.status}`);
-      };
-  
-      return {
-        utilisateurs,
-        isAddModalOpen,
-        isEditModalOpen,
-        newForm,
-        editForm,
-        notification,
-        openAddModal,
-        closeAddModal,
-        openEditModal,
-        closeEditModal,
-        submitAddForm,
-        submitEditForm,
-        confirmDelete,
-        viewUser, // Ajout de la fonction dans le retour
-      };
-    },
-  };
+        await fetchUsers(); // Rafraîchir les utilisateurs après la suppression
+      } catch (error) {
+        console.error("Error in confirmDelete:", error);
+        showNotification('Une erreur est survenue lors de la suppression de l\'utilisateur.');
+      }
+    };
+
+    const viewUser = (utilisateur) => {
+      alert(`Détails de l'utilisateur :\nNom: ${utilisateur.nom}\nEmail: ${utilisateur.email}\nRôle: ${utilisateur.role}\nStatut: ${utilisateur.status ? 'Actif' : 'Inactif'}`);
+    };
+
+    return {
+      utilisateurs,
+      isAddModalOpen,
+      isEditModalOpen,
+      newForm,
+      editForm,
+      notification,
+      openAddModal,
+      closeAddModal,
+      openEditModal,
+      closeEditModal,
+      submitAddForm,
+      submitEditForm,
+      confirmDelete,
+      viewUser,
+    };
+  },
+};
+
   </script>
   
   <style>

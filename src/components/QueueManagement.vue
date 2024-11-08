@@ -2,6 +2,7 @@
     <div class="container mt-5">
         <h2 class="text-center mb-4">Gestion des Files d'Attente</h2>
 
+        <!-- Queue Management Form -->
         <form @submit.prevent="addQueue" class="mb-4 shadow p-4 rounded bg-light">
             <h4>Ajouter une File d'Attente</h4>
             <div class="row">
@@ -17,6 +18,7 @@
             </div>
         </form>
 
+        <!-- List of Queues -->
         <div class="row">
             <div class="col-md-6" v-for="queue in queues" :key="queue.id">
                 <div class="card mb-3 shadow">
@@ -35,6 +37,7 @@
             </div>
         </div>
 
+     
         <div v-if="editingQueue" class="mt-4">
             <h3>Modifier la File d'Attente</h3>
             <form @submit.prevent="updateQueue" class="mb-3 shadow p-4 rounded bg-light">
@@ -53,6 +56,7 @@
             </form>
         </div>
 
+      
         <div class="mt-5">
             <h3>Prise de Ticket</h3>
             <form @submit.prevent="takeTicket" class="mb-4 shadow p-4 rounded bg-light">
@@ -84,17 +88,18 @@
             </ul>
         </div>
 
+        
         <div v-if="editingTicket" class="mt-4">
             <h3>Modifier le Ticket</h3>
             <form @submit.prevent="updateTicket" class="mb-3 shadow p-4 rounded bg-light">
                 <div class="row">
-                    <div class="col-md-6 mb-3">
+                    <div class="col-md-6 mb-4">
                         <input v-model="editingTicket.number" class="form-control" placeholder="Numéro de Ticket" required />
                     </div>
                     <div class="col-md-4 mb-3">
                         <input v-model="editingTicket.queueId" type="number" class="form-control" placeholder="ID de File" required />
                     </div>
-                    <div class="col-md-2 mb-3">
+                    <div class="col-md-2 mb-4">
                         <button type="submit" class="btn btn-success w-100">Mettre à jour</button>
                         <button type="button" @click="cancelTicketEdit" class="btn btn-secondary w-100">Annuler</button>
                     </div>
@@ -102,6 +107,7 @@
             </form>
         </div>
 
+        
         <div class="mt-5">
             <h3>Gestion des Guichets</h3>
             <form @submit.prevent="addCounter" class="mb-4 shadow p-4 rounded bg-light">
@@ -126,13 +132,14 @@
                         Guichet #{{ counter.id }}: {{ counter.name }} - Responsable: {{ counter.manager }} - Statut: {{ counter.status }}
                     </span>
                     <div>
-                        <button @click="editCounter(counter)" class="btn btn-warning btn-sm me-2">Modifier</button>
+                        <button @click="editCounter(counter)" class="btn btn-warning btn-sm me-3">Modifier</button>
                         <button @click="removeCounter(counter.id)" class="btn btn-danger btn-sm">Supprimer</button>
                     </div>
                 </li>
             </ul>
         </div>
 
+        
         <div v-if="editingCounter" class="mt-4">
             <h3>Modifier le Guichet</h3>
             <form @submit.prevent="updateCounter" class="mb-3 shadow p-4 rounded bg-light">
@@ -150,135 +157,152 @@
                 </div>
             </form>
         </div>
+
     </div>
 </template>
 
 <script>
 export default {
-    data() {
-        return {
-            queues: [],
-            tickets: [],
-            counters: [],
-            newQueueName: '',
-            newQueueSize: '',
-            editingQueue: null,
-            editingTicket: null,
-            editingCounter: null,
-            newCounterName: '',
-            newCounterManager: '',
-            selectedQueue: null,
+  data() {
+    return {
+      newQueueName: '',
+      newQueueSize: null,
+      queues: [],
+      editingQueue: null,
+      selectedQueue: '',
+      tickets: [],
+      editingTicket: null,
+      newCounterName: '',
+      newCounterManager: '',
+      counters: [],
+      editingCounter: null,
+    };
+  },
+  methods: {
+    addQueue() {
+      const newQueue = {
+        id: Date.now(),
+        name: this.newQueueName,
+        size: this.newQueueSize,
+      };
+      this.queues.push(newQueue);
+      this.newQueueName = '';
+      this.newQueueSize = null;
+    },
+    getQueueProgress(queue) {
+      const totalTickets = this.tickets.filter((ticket) => ticket.queueId === queue.id).length;
+      return (totalTickets / queue.size) * 100;
+    },
+    editQueue(queue) {
+      this.editingQueue = { ...queue };
+    },
+    cancelEdit() {
+      this.editingQueue = null;
+    },
+    updateQueue() {
+      const queueIndex = this.queues.findIndex((queue) => queue.id === this.editingQueue.id);
+      if (queueIndex !== -1) {
+        this.queues[queueIndex] = this.editingQueue;
+      }
+      this.editingQueue = null;
+    },
+    removeQueue(queueId) {
+      this.queues = this.queues.filter((queue) => queue.id !== queueId);
+    },
+    takeTicket() {
+      if (this.selectedQueue) {
+        const selectedQueue = this.queues.find((queue) => queue.id === this.selectedQueue);
+        const queueSize = selectedQueue.size;
+        const queueTickets = this.tickets.filter((ticket) => ticket.queueId === selectedQueue.id);
+        if (queueTickets.length < queueSize) {
+          const newTicket = {
+          id: this.tickets.length + 1,  
+          number: queueTickets.length + 1,
+          queueId: selectedQueue.id,
+          counterName: 'Guichet 1',
+          status: 'En Attente',
+          createdBy: 'Utilisateur 1',
+          issueDate: new Date(),
         };
-    },
-    methods: {
-        addQueue() {
-            const newQueue = {
-                id: Date.now(),
-                name: this.newQueueName,
-                size: this.newQueueSize,
-            };
-            this.queues.push(newQueue);
-            this.newQueueName = '';
-            this.newQueueSize = '';
-        },
-        editQueue(queue) {
-            this.editingQueue = { ...queue };
-        },
-        updateQueue() {
-            const index = this.queues.findIndex(queue => queue.id === this.editingQueue.id);
-            if (index !== -1) {
-                this.queues.splice(index, 1, this.editingQueue);
-                this.editingQueue = null;
-            }
-        },
-        cancelEdit() {
-            this.editingQueue = null;
-        },
-        removeQueue(id) {
-            this.queues = this.queues.filter(queue => queue.id !== id);
-            this.tickets = this.tickets.filter(ticket => ticket.queueId !== id);
-        },
-        takeTicket() {
-            const selectedQueue = this.queues.find(queue => queue.id === this.selectedQueue);
-            if (selectedQueue) {
-                const totalTickets = this.tickets.filter(ticket => ticket.queueId === selectedQueue.id).length;
-                if (totalTickets >= selectedQueue.size) {
-                    alert('La file d\'attente est pleine, impossible de prendre un nouveau ticket.');
-                    return;
-                }
-            }
 
-            const ticketNumber = this.tickets.length + 1; // Consider a more robust method for ticket numbers
-            const newTicket = {
-                id: Date.now(),
-                number: ticketNumber,
-                queueId: this.selectedQueue,
-                createdBy: 'Utilisateur', 
-                issueDate: new Date().toLocaleString(),
-                status: 'En attente',
-            };
-            this.tickets.push(newTicket);
-            this.selectedQueue = null; 
-        },
-        getQueueProgress(queue) {
-            const totalTickets = this.tickets.filter(ticket => ticket.queueId === queue.id).length;
-            return (totalTickets / queue.size) * 100;
-        },
-        getQueueName(queueId) {
-            const queue = this.queues.find(queue => queue.id === queueId);
-            return queue ? queue.name : 'Inconnu';
-        },
-        getTicketPosition(ticket) {
-            const ticketsInQueue = this.tickets.filter(t => t.queueId === ticket.queueId);
-            return ticketsInQueue.indexOf(ticket) + 1;
-        },
-        editTicket(ticket) {
-            this.editingTicket = { ...ticket };
-        },
-        updateTicket() {
-            const index = this.tickets.findIndex(ticket => ticket.id === this.editingTicket.id);
-            if (index !== -1) {
-                this.tickets.splice(index, 1, this.editingTicket);
-                this.editingTicket = null;
-            }
-        },
-        removeTicket(id) {
-            this.tickets = this.tickets.filter(ticket => ticket.id !== id);
-        },
-        addCounter() {
-            const newCounter = {
-                id: Date.now(),
-                name: this.newCounterName,
-                manager: this.newCounterManager,
-                status: 'Actif',
-            };
-            this.counters.push(newCounter);
-            this.newCounterName = '';
-            this.newCounterManager = '';
-        },
-        editCounter(counter) {
-            this.editingCounter = { ...counter };
-        },
-        updateCounter() {
-            const index = this.counters.findIndex(counter => counter.id === this.editingCounter.id);
-            if (index !== -1) {
-                this.counters.splice(index, 1, this.editingCounter);
-                this.editingCounter = null;
-            }
-        },
-        cancelCounterEdit() {
-            this.editingCounter = null;
-        },
-        removeCounter(id) {
-            this.counters = this.counters.filter(counter => counter.id !== id);
-        },
+          this.tickets.push(newTicket);
+        } else {
+          alert("La file est pleine, impossible de prendre un ticket.");
+        }
+      }
     },
+    getTicketPosition(ticket) {
+      return this.tickets.filter(t => t.queueId === ticket.queueId && t.issueDate <= ticket.issueDate).length;
+    },
+    getQueueName(queueId) {
+      const queue = this.queues.find(queue => queue.id === queueId);
+      return queue ? queue.name : '';
+    },
+    editTicket(ticket) {
+      this.editingTicket = { ...ticket };
+    },
+    cancelTicketEdit() {
+      this.editingTicket = null;
+    },
+    updateTicket() {
+      const ticketIndex = this.tickets.findIndex((ticket) => ticket.id === this.editingTicket.id);
+      if (ticketIndex !== -1) {
+        this.tickets[ticketIndex] = this.editingTicket;
+      }
+      this.editingTicket = null;
+    },
+    removeTicket(ticketId) {
+      this.tickets = this.tickets.filter((ticket) => ticket.id !== ticketId);
+    },
+    addCounter() {
+      const newCounter = {
+        id: Date.now(),
+        name: this.newCounterName,
+        manager: this.newCounterManager,
+        status: 'Disponible',
+      };
+      this.counters.push(newCounter);
+      this.newCounterName = '';
+      this.newCounterManager = '';
+    },
+    editCounter(counter) {
+      this.editingCounter = { ...counter };
+    },
+    cancelCounterEdit() {
+      this.editingCounter = null;
+    },
+    updateCounter() {
+      const counterIndex = this.counters.findIndex((counter) => counter.id === this.editingCounter.id);
+      if (counterIndex !== -1) {
+        this.counters[counterIndex] = this.editingCounter;
+      }
+      this.editingCounter = null;
+    },
+    removeCounter(counterId) {
+      this.counters = this.counters.filter((counter) => counter.id !== counterId);
+    },
+  },
 };
 </script>
 
 <style scoped>
-.container {
-    max-width: 800px;
-    margin: 0 auto;
-}
+  .container {
+    max-width: 1200px;
+  }
+  .btn {
+    padding: 10px;
+    font-size: 16px;
+  }
+  .card-title {
+    font-size: 1.5rem;
+  }
+  .card-subtitle {
+    font-size: 1.2rem;
+  }
+  .progress-bar {
+    background-color: #28a745;
+  }
+  .list-group-item {
+    font-size: 1rem;
+  }
 </style>

@@ -1,9 +1,11 @@
+import 'emoji-picker-element';
 import { createApp } from 'vue';
 import App from './App.vue';
 import router from './router';
 import 'bootstrap/dist/css/bootstrap.min.css'; // Styles Bootstrap
 import 'font-awesome/css/font-awesome.css'; // Styles Font Awesome
 import '../src/assets/main.css'
+
 
 
 // Importer vue-i18n et les fichiers de traduction
@@ -14,6 +16,7 @@ import ar from './locales/ar'; // Importer le fichier de traduction en arabe
 
 // Importer et configurer Pinia
 import { createPinia } from 'pinia';
+
 
 // Configuration des traductions
 const messages = {

@@ -10,7 +10,9 @@ import EvaluationManager from '../components/EvaluationManager.vue';
 import Utilisateur from '../components/Utilisateur.vue';
 import Modal from '../components/Modal.vue'
 import Header from '../components/Layout/Header.vue';
-
+import TicketManagement from '../components/TicketManagement.vue'
+import CounterManagement from '../components/CounterManagement.vue'
+import QueueManagemet from '../components/QueueManagemet.vue'
 const routes = [
   { path: '/dashboard', component: Dashboard, meta: { requiresAuth: true } },
   { path: '/home', component: Home, meta: { requiresAuth: true } },
@@ -21,7 +23,11 @@ const routes = [
   { path: '/queue', component: QueueManagement, meta: { requiresAuth: true } },
   { path: '/evaluation-manager', component: EvaluationManager},
   { path: '/utilisateur', component: Utilisateur },
-  { path: '/header', component: Utilisateur },
+  { path: '/header', component: Header },
+  { path: '/ticket-management', component: TicketManagement },
+  { path: '/counter-management', component: CounterManagement },
+  { path: '/queue-management', component:QueueManagement },
+
 
   { path: '/modal', component:Modal},
   { path: '/', redirect: '/login' }, // Redirige vers la page de connexion par défaut

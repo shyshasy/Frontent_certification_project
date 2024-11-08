@@ -60,81 +60,90 @@
     </div>
   </template>
   
-  <script>
-  import { ref } from 'vue';
-  import 'emoji-picker-element'; // Importer la bibliothèque d'emojis
-  
-  export default {
-    setup() {
-      const evaluations = ref([]);
-      const newEvaluation = ref({
-        satis_score: '',
-        commentaire: '',
-        date_evaluation: '',
-        utilisateur_id: ''
-      });
-      const showCreateForm = ref(false);
-      let nextId = 1; // Simuler un ID auto-incrémenté
-  
-      const createEvaluation = () => {
-        if (!newEvaluation.value.satis_score || !newEvaluation.value.commentaire || !newEvaluation.value.date_evaluation || !newEvaluation.value.utilisateur_id) {
-          alert("Veuillez remplir tous les champs !");
-          return;
-        }
-  
-        const evaluation = { id: nextId++, ...newEvaluation.value };
-        evaluations.value.push(evaluation);
-  
-        // Réinitialiser le formulaire après succès
-        newEvaluation.value = {
-          satis_score: '',
-          commentaire: '',
-          date_evaluation: '',
-          utilisateur_id: ''
-        };
-        showCreateForm.value = false;
-      };
-  
-      const deleteEvaluation = (id) => {
-  const isConfirmed = confirm("Êtes-vous sûr de vouloir supprimer cette évaluation ?");
-  if (isConfirmed) {
-    evaluations.value = evaluations.value.filter(evaluation => evaluation.id !== id);
+  <script setup>
+import { ref, watchEffect } from 'vue';
+import 'emoji-picker-element';
+import axios from 'axios'; // Importer axios
+
+const evaluations = ref([]);
+const newEvaluation = ref({
+  satis_score: '',
+  commentaire: '',
+  date_evaluation: '',
+  utilisateur_id: ''
+});
+const showCreateForm = ref(false);
+
+// Charger les évaluations depuis l'API backend
+const loadEvaluations = async () => {
+  try {
+    const response = await axios.get('http://localhost:5002/api/evaluations');
+    evaluations.value = response.data;
+  } catch (error) {
+    console.error("Erreur lors du chargement des évaluations :", error);
   }
 };
 
-  
-      const viewEvaluation = (evaluation) => {
-        alert(`Détails de l'évaluation:\n
-        Commentaire: ${evaluation.commentaire}\n
-        Score: ${evaluation.satis_score}\n
-        Date: ${evaluation.date_evaluation}\n
-        ID Utilisateur: ${evaluation.utilisateur_id}`);
-      };
-  
-      const addEmoji = (event) => {
-        newEvaluation.value.commentaire += event.detail.unicode; // Ajouter l'emoji au commentaire
-      };
-  
-      return {
-        evaluations,
-        newEvaluation,
-        showCreateForm,
-        createEvaluation,
-        deleteEvaluation,
-        viewEvaluation,
-        addEmoji
-      };
-    }
+// Appeler la fonction de chargement dès que le composant est monté
+loadEvaluations();
+
+const createEvaluation = async () => {
+  const { satis_score, commentaire, date_evaluation, utilisateur_id } = newEvaluation.value;
+  if (!satis_score || !commentaire || !date_evaluation || !utilisateur_id) {
+    alert("Veuillez remplir tous les champs !");
+    return;
+  }
+
+  try {
+    const response = await axios.post('http://localhost:5002/api/evaluations', newEvaluation.value);
+    evaluations.value.push(response.data);
+  } catch (error) {
+    console.error("Erreur lors de la création de l'évaluation :", error);
+  }
+
+  // Réinitialiser le formulaire après succès
+  newEvaluation.value = {
+    satis_score: '',
+    commentaire: '',
+    date_evaluation: '',
+    utilisateur_id: ''
   };
+  showCreateForm.value = false;
+};
+
+const deleteEvaluation = async (id) => {
+  const isConfirmed = confirm("Êtes-vous sûr de vouloir supprimer cette évaluation ?");
+  if (isConfirmed) {
+    try {
+      await axios.delete(`http://localhost:5002/api/evaluations/${id}`);
+      evaluations.value = evaluations.value.filter(evaluation => evaluation.id !== id);
+    } catch (error) {
+      console.error("Erreur lors de la suppression de l'évaluation :", error);
+    }
+  }
+};
+
+const viewEvaluation = (evaluation) => {
+  alert(`Détails de l'évaluation:\n
+  Commentaire: ${evaluation.commentaire}\n
+  Score: ${evaluation.satis_score}\n
+  Date: ${evaluation.date_evaluation}\n
+  ID Utilisateur: ${evaluation.utilisateur_id}`);
+};
+
+const addEmoji = (event) => {
+  newEvaluation.value.commentaire += event.detail.unicode; // Ajouter l'emoji au commentaire
+};
+
   </script>
   
+  
   <style scoped>
-  /* Le CSS reste inchangé */
   .container {
     max-width: 800px;
     margin: auto;
     padding: 20px;
-    background: linear-gradient(to right, #a0c4ff, #80d3f6); /* Mélange de bleu */
+    background: linear-gradient(to right, #a0c4ff, #80d3f6);
     border-radius: 15px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   }
@@ -142,7 +151,7 @@
   .title {
     text-align: center;
     font-size: 2.5rem;
-    color: #003366; /* Couleur bleu foncé */
+    color: #003366;
     margin-bottom: 20px;
   }
   
@@ -150,7 +159,7 @@
     display: block;
     margin: 20px auto;
     padding: 10px 20px;
-    background-color: #0056b3; /* Bleu moyen */
+    background-color: #0056b3;
     color: white;
     font-size: 1.2rem;
     border: none;
@@ -160,7 +169,7 @@
   }
   
   .btn-add:hover {
-    background-color: #004494; /* Bleu foncé au survol */
+    background-color: #004494;
   }
   
   .form-container {
@@ -174,7 +183,7 @@
   
   .form-title {
     font-size: 1.8rem;
-    color: #003366; /* Couleur bleu foncé */
+    color: #003366;
     margin-bottom: 15px;
   }
   
@@ -186,7 +195,7 @@
   .form-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 15px; /* Espace entre les champs */
+    gap: 15px;
   }
   
   .form-group {
@@ -208,55 +217,50 @@
   }
   
   .form-input:focus {
-    background-color: linear-gradient(45deg, #007bff, #00c6ff, #00e3e3, #0004ff); 
+    border-color: #007bff;
     outline: none;
   }
   
   .commentaire-input {
-    height: 100px; /* Hauteur du champ de commentaire */
-    resize: none; /* Désactiver le redimensionnement */
+    height: 100px;
+    resize: none;
   }
   
   .button-group {
     display: flex;
     justify-content: space-between;
-    margin-top: 20px; /* Espacement au-dessus des boutons */
+    margin-top: 20px;
+  }
+  
+  .btn-submit, .btn-cancel {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    flex: 1;
   }
   
   .btn-submit {
-    background-color: #4CAF50; /* Vert */
+    background-color: #4CAF50;
     color: white;
-    padding: 10px 15px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    flex: 1;
-    margin-right: 10px;
   }
   
   .btn-submit:hover {
-    background-color: #45a049; /* Vert au survol */
+    background-color: #45a049;
   }
   
   .btn-cancel {
-    background-color: #f44336; /* Rouge */
+    background-color: #f44336;
     color: white;
-    padding: 10px 15px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    flex: 1;
   }
   
   .btn-cancel:hover {
-    background-color: #e53935; /* Rouge au survol */
+    background-color: #e53935;
   }
   
   .list-title {
     font-size: 1.8rem;
-    color: #1976D2; /* Bleu */
+    color: #1976D2;
     margin-top: 20px;
     margin-bottom: 10px;
   }
@@ -284,22 +288,13 @@
     color: #333;
   }
   
-  .evaluation-score,
-  .evaluation-date,
-  .evaluation-user {
+  .evaluation-score, .evaluation-date, .evaluation-user {
     font-size: 0.9rem;
     color: #666;
   }
   
-  .button-group {
-    margin-top: 10px;
-    display: flex;
-    justify-content: space-between;
-  }
-  
-  .btn-view,
-  .btn-delete {
-    background-color: #1976D2; /* Bleu */
+  .btn-view, .btn-delete {
+    background-color: #1976D2;
     color: white;
     padding: 5px 10px;
     border: none;
@@ -309,25 +304,26 @@
   }
   
   .btn-view:hover {
-    background-color: #1565C0; /* Bleu foncé au survol */
+    background-color: #1565C0;
   }
   
   .btn-delete {
-    background-color: #f44336; /* Rouge */
+    background-color: #f44336;
   }
   
   .btn-delete:hover {
-    background-color: #e53935; /* Rouge foncé au survol */
+    background-color: #e53935;
   }
   
   @keyframes slideIn {
     from {
-      opacity: 0;
       transform: translateY(-20px);
+      opacity: 0;
     }
     to {
-      opacity: 1;
       transform: translateY(0);
+      opacity: 1;
     }
   }
   </style>
+  

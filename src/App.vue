@@ -13,6 +13,11 @@
     </div>
     <Footer />
   </div>
+  <div id="app">
+    <QueueManagement :queues="queues" />
+    <TicketManagement :queues="queues" :tickets="tickets" />
+    <CounterManagement :counters="counters" />
+  </div>
 </template>
 
 <script>

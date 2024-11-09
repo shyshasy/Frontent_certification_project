@@ -13,16 +13,13 @@
     </div>
     <Footer />
   </div>
-  <div id="app">
-    <QueueManagement :queues="queues" />
-    <TicketManagement :queues="queues" :tickets="tickets" />
-    <CounterManagement :counters="counters" />
-  </div>
+ 
 </template>
 
 <script>
 import Header from './components/Layout/Header.vue';
 import Footer from './components/Layout/Footer.vue';
+
 
 export default {
   components: {

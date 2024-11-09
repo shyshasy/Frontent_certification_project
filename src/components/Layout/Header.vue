@@ -53,8 +53,8 @@
           </li>
 
           <li class="nav-item">
-            <router-link class="nav-link" to="/evaluation-manager">
-              <i class="fa fa-ticket-alt"></i> Evaluation
+            <router-link class="nav-link" to="/gestion-guichet">
+              <i class="fa fa-ticket-alt"></i> Gestion De Guichet
             </router-link>
           </li>
         </ul>
@@ -69,12 +69,19 @@
 
 <style scoped>
 .innovative-navbar {
+  width: 100vw; /* Prend toute la largeur de l'écran */
   background: linear-gradient(45deg, #007bff, #00c6ff, #00e3e3, #0004ff); 
   padding: 0.75rem 1rem;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
   transition: background-color 0.5s ease, box-shadow 0.5s ease;
-  background-size: 400% 400%; 
-  animation: gradientShift 12s ease infinite; 
+  background-size: 400% 400%;
+  animation: gradientShift 12s ease infinite;
+  margin: 0; /* Supprimer les marges pour qu'il soit bord à bord */
+}
+
+.container-fluid {
+  max-width: 100%; /* Supprimer la restriction de largeur par défaut */
+  padding: 0; /* Supprimer le padding par défaut */
 }
 
 @keyframes gradientShift {

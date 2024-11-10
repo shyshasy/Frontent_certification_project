@@ -1,4 +1,7 @@
 <template>
+    <div class="page-content">
+        <!-- Votre contenu principal ici -->
+    </div>
     <footer class="footer">
         <div class="container">
             <span class="text-muted">© 2024 Queue Management App</span>
@@ -11,22 +14,25 @@ export default {};
 </script>
 
 <style scoped>
+.page-content {
+    padding-bottom: 60px; /* Ajoutez un padding équivalent à la hauteur du footer */
+}
+
 .footer {
     position: fixed;
     left: 0;
     bottom: 0;
-    width: 100%; /* Prend toute la largeur de l'écran */
+    width: 100%; 
     text-align: center;
     background-color: #f8f9fa;
     padding: 10px 0;
-    border-radius: 0; /* Force l'absence de bord arrondi */
+    border-radius: 0;
+    height: 60px; /* Spécifiez la hauteur du footer */
 }
 
 .container {
-    width: 100%; /* S'assure que le conteneur du footer prend également toute la largeur */
-    margin: 0 auto; /* Centre le contenu horizontalement */
+    width: 100%;
+    margin: 0 auto;
 }
-
-
 
 </style>

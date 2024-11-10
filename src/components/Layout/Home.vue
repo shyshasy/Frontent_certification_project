@@ -77,12 +77,12 @@
             <h2>Avis de Nos Utilisateurs</h2>
             <div class="testimonial-container">
                 <div class="testimonial">
-                    <img src="/public/User1.webp" alt="Utilisateur 1" />
+                    <img src="/User1.webp" alt="Utilisateur 1" />
                     <p>"Une expérience exceptionnelle! La gestion de la file d'attente n'a jamais été aussi facile."</p>
                     <h4>Marie Dupont</h4>
                 </div>
                 <div class="testimonial">
-                    <img src="/public/User2.webp" alt="Utilisateur 2" />
+                    <img src="/User2.webp" alt="Utilisateur 2" />
                     <p>"Grâce à cette application, j'ai pu réduire le temps d'attente de mes clients."</p>
                     <h4>Jean Martin</h4>
                 </div>

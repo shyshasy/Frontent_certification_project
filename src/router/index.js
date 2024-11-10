@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
+import Login from '../components/Auth/Login.vue'; 
 import Dashboard from '../components/Dashboard.vue'; 
 import Home from '../components/Layout/Home.vue'; 
-import Login from '../components/Auth/Login.vue'; 
 import Register from '../components/Auth/Register.vue'; 
 import ResetPassword from '../components/Auth/ResetPassword.vue'; // Importation de ResetPassword
 // import UserProfile from '../components/User/UserProfile.vue'; 
@@ -10,13 +10,13 @@ import EvaluationManager from '../components/EvaluationManager.vue';
 import Utilisateur from '../components/Utilisateur.vue';
 import Modal from '../components/Modal.vue'
 import Header from '../components/Layout/Header.vue';
-
-
 import GestionGuichet from '../components/GestionGuichet.vue'
 const routes = [
+
+  { path: '/login', component: Login },
+  { path: '/', redirect: '/login' },
   { path: '/dashboard', component: Dashboard, meta: { requiresAuth: true } },
   { path: '/home', component: Home, meta: { requiresAuth: true } },
-  { path: '/login', component: Login },
   { path: '/register', component: Register },
   { path: '/reset-password', component: ResetPassword }, // Route pour la réinitialisation du mot de passe
   // { path: '/user-profile', component: UserProfile, meta: { requiresAuth: true } },
@@ -29,7 +29,7 @@ const routes = [
 
 
   { path: '/modal', component:Modal},
-  { path: '/', redirect: '/login' }, // Redirige vers la page de connexion par défaut
+   // Redirige vers la page de connexion par défaut
 ];
 
 // Création du routeur

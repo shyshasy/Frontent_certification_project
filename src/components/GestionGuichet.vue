@@ -241,6 +241,7 @@ export default {
   background-color: transparent;
   border: none;
   padding: 20px;
+  
 }
 
 .form-grid {

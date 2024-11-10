@@ -42,15 +42,39 @@ export default {
 }
 
 #app {
-  font-family: 'Arial', sans-serif; /* Police simple et moderne */
+  font-family: 'Arial', sans-serif;
   text-align: center;
-  color: #333; /* Couleur du texte */
-  background-color: #ffffff; /* Fond blanc pour une sensation d'espace */
-  min-height: 100vh; /* Remplir tout l'écran */
+  color: #333;
+  background-color: #ffffff;
+  min-height: 100vh;
   display: flex;
-  flex-direction: column; /* Alignement vertical */
-  align-items: center; /* Centrage horizontal */
-  padding: 20px; /* Espacement autour de l'application */
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  padding-top: 80px; /* Compense la hauteur de la barre de navigation */
+}
+
+.language-selector-container {
+  margin-bottom: 20px;
+}
+
+.language-selector {
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 5px;
+  border: 2px solid #007bff;
+  background-color: #ffffff;
+  color: #333;
+  transition: border-color 0.3s;
+}
+
+.language-selector:hover {
+  border-color: #0056b3;
+}
+
+.language-selector:focus {
+  outline: none;
+  border-color: #0056b3;
 }
 
 .container {
@@ -58,7 +82,17 @@ export default {
   background: #f8f9fa; /* Fond léger */
   padding: 20px; /* Espacement interne */
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Ombre légère pour profondeur */
+}.container {
+  width: 90%; /* Prend 90% de la largeur de l'écran, laissant 5% de chaque côté */
+  max-width: 1200px; /* Largeur maximale pour ne pas trop étirer sur les écrans larges */
+  background: #f8f9fa; /* Fond léger */
+  border-radius: 10px; 
+  padding: 20px; /* Espacement interne */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Ombre légère */
+  margin-left: auto; /* Centre la boîte horizontalement */
+  margin-right: auto; /* Centre la boîte horizontalement */
 }
+
 
 .language-selector-container {
   margin-bottom: 20px; /* Espacement sous le sélecteur de langue */

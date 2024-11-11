@@ -145,45 +145,29 @@ export default {
 
     const submitEditForm = async () => {
   try {
-    // Log de l'ID sélectionné
-    console.log("Selected Guichet ID:", selectedGuichetId.value);
-
-    // Extraire les données réelles du formulaire (enlevant le Proxy)
-    const formData = { ...editForm.value };  // On clone les données de `editForm.value`
-    console.log("Form Data:", formData);
-
-    // Vérifiez si l'ID et les données du formulaire sont valides
+    // Vérifie que l'ID du guichet est valide
     if (!selectedGuichetId.value) {
       throw new Error("L'ID du guichet n'est pas valide.");
     }
 
-    if (!formData || Object.keys(formData).length === 0) {
-      throw new Error("Les données du formulaire sont vides.");
-    }
+    // Assure-toi que les champs sont correctement formatés
+    const updatedData = {
+      numero_guichet: editForm.value.numero_guichet,
+      status: editForm.value.status === 'true' || editForm.value.status === true, // Envoie en tant que booléen
+      responsable: editForm.value.responsable
+    };
 
-    // Effectuer la requête PUT avec axios
-    await axios.put(
-      `http://localhost:5002/api/guichets/${selectedGuichetId.value}`,
-      formData
-    );
+    // Effectue la requête PUT avec les données corrigées
+    await axios.put(`http://localhost:5002/api/guichets/${selectedGuichetId.value}`, updatedData);
 
-    // Afficher une notification de succès et fermer le modal
+    // Notification de succès
     showNotification('Guichet modifié avec succès !');
     closeEditModal();
-
-    // Recharger les données des guichets
     await fetchGuichets();
   } catch (error) {
-    // Log de l'erreur complète pour faciliter le débogage
-    console.error("Error in submitEditForm:", error);
-
-    // Vérifiez si c'est une erreur Axios pour afficher un message d'erreur spécifique
-    if (error.response) {
-      console.error("Erreur réponse API:", error.response.data);
-    }
-
-    // Afficher une notification d'erreur à l'utilisateur
-    showNotification("Erreur lors de la modification du guichet !");
+    // Affiche des détails sur l'erreur rencontrée
+    console.error("Erreur lors de la modification du guichet :", error.response ? error.response.data : error.message);
+    showNotification(error.response ? `Erreur API : ${error.response.data.message}` : "Erreur lors de la modification du guichet !");
   }
 };
 
@@ -241,7 +225,6 @@ export default {
   background-color: transparent;
   border: none;
   padding: 20px;
-  
 }
 
 .form-grid {
@@ -256,26 +239,28 @@ export default {
   flex-direction: column;
 }
 
-.form-control {
-  width: 100%;
-  padding: 12px; /* Ajustement du rembourrage interne pour les champs */
-  margin-bottom: 20px; /* Espace supplémentaire entre chaque champ du formulaire */
+.modal {
+  display: block;
+  background-color: #fff;
+  padding: 2rem;
+  border-radius: 1rem;
+  width: 70%;
 }
 
-.table-striped tbody tr:nth-of-type(odd) {
-  background-color: rgba(0, 0, 0, 0.05);
+.modal-header {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.modal-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  cursor: pointer;
 }
 
 .button-group {
   display: flex;
-  gap: 0.5rem;
-}
-
-.alert {
-  margin-bottom: 20px; /* Espace entre le message de notification et le tableau */
-}
-
-button[type="submit"] {
-  margin-top: 20px; /* Espace supplémentaire entre les champs et le bouton */
+  justify-content: space-around;
 }
 </style>

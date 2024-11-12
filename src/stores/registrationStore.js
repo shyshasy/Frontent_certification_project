@@ -1,17 +1,19 @@
-// src/store.js
 import { createStore } from 'vuex';
 
-const store = createStore({
+export const registrationStore = createStore({
   state: {
     users: JSON.parse(localStorage.getItem('users')) || [],
+    isLoading: false,
     errorMessage: '',
     successMessage: '',
-    isLoading: false,
   },
   mutations: {
-    SET_USERS(state, users) {
-      state.users = users;
-      localStorage.setItem('users', JSON.stringify(users));
+    ADD_USER(state, newUser) {
+      state.users.push(newUser);
+      localStorage.setItem('users', JSON.stringify(state.users));
+    },
+    SET_LOADING(state, isLoading) {
+      state.isLoading = isLoading;
     },
     SET_ERROR_MESSAGE(state, message) {
       state.errorMessage = message;
@@ -19,18 +21,11 @@ const store = createStore({
     SET_SUCCESS_MESSAGE(state, message) {
       state.successMessage = message;
     },
-    SET_LOADING(state, loading) {
-      state.isLoading = loading;
-    },
   },
   actions: {
-    register({ commit, state }, userData) {
+    registerUser({ commit, state }, newUser) {
       commit('SET_LOADING', true);
-      commit('SET_ERROR_MESSAGE', '');
-      commit('SET_SUCCESS_MESSAGE', '');
-
-      // Vérifier si l'utilisateur existe déjà
-      const userExists = state.users.find(user => user.email === userData.email);
+      const userExists = state.users.find(user => user.email === newUser.email);
 
       if (userExists) {
         commit('SET_ERROR_MESSAGE', 'Cet email est déjà utilisé.');
@@ -38,31 +33,15 @@ const store = createStore({
         return;
       }
 
-      // Créer un nouvel utilisateur
-      const newUser = {
-        name: userData.name,
-        email: userData.email,
-        phone: userData.phone,
-        password: userData.password,
-      };
-
-      // Ajouter le nouvel utilisateur à la liste des utilisateurs
-      const updatedUsers = [...state.users, newUser];
-      commit('SET_USERS', updatedUsers);
-
+      commit('ADD_USER', newUser);
       commit('SET_SUCCESS_MESSAGE', 'Inscription réussie ! Vous pouvez maintenant vous connecter.');
-
-      // Masquer l'indicateur de chargement après un délai
-      setTimeout(() => {
-        commit('SET_LOADING', false);
-      }, 2000); // Délai avant la redirection
+      commit('SET_LOADING', false);
     },
   },
   getters: {
-    getErrorMessage: state => state.errorMessage,
-    getSuccessMessage: state => state.successMessage,
+    users: state => state.users,
     isLoading: state => state.isLoading,
+    errorMessage: state => state.errorMessage,
+    successMessage: state => state.successMessage,
   },
 });
-
-export default store;

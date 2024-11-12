@@ -10,7 +10,7 @@
     <table class="table table-striped">
       <thead>
         <tr>
-          <th>Numero Guichet</th>
+          <th>Numéro Guichet</th>
           <th>Status</th>
           <th>Responsable</th>
           <th>Actions</th>
@@ -37,11 +37,12 @@
       <form @submit.prevent="submitAddForm" class="form-container">
         <div class="form-grid">
           <div class="form-left">
-            <input v-model="newForm.numero_guichet" placeholder="Nom du Guichet" class="form-control" required />
+            <input v-model="newForm.numero_guichet" placeholder="numero du Guichet" class="form-control" required />
             <select v-model="newForm.status" class="form-control" required>
               <option value="" disabled>Status</option>
-              <option value="true">Ouvert</option>
-              <option value="false">Fermé</option>
+              <option :value="true">Ouvert</option>
+            <option :value="false">Fermé</option>
+
             </select>
           </div>
           <div class="form-right">
@@ -57,7 +58,7 @@
       <form @submit.prevent="submitEditForm" class="form-container">
         <div class="form-grid">
           <div class="form-left">
-            <input v-model="editForm.numero_guichet" placeholder="Nom du Guichet" class="form-control" required />
+            <input v-model="editForm.numero_guichet" placeholder="Numero du Guichet" class="form-control" required />
             <select v-model="editForm.status" class="form-control" required>
               <option value="" disabled>Status</option>
               <option value="true">Ouvert</option>
@@ -87,18 +88,17 @@ export default {
     const guichets = ref([]);
     const isAddModalOpen = ref(false);
     const isEditModalOpen = ref(false);
-    const newForm = ref({ numero_guichet: '', status: '', responsable: '' });
-    const editForm = ref({ numero_guichet: '', status: '', responsable: '' });
+    const newForm = ref({ numero_guichet: '', status: false, responsable: '' });
+    const editForm = ref({ numero_guichet: '', status: false, responsable: '' });
     const selectedGuichetId = ref(null);
     const notification = ref('');
 
-    // Fetch guichets from the backend
     const fetchGuichets = async () => {
       try {
         const response = await axios.get('http://localhost:5002/api/guichets');
         guichets.value = response.data;
       } catch (error) {
-        console.error(error);
+        console.error("Erreur dans fetchGuichets:", error);
       }
     };
 
@@ -117,80 +117,81 @@ export default {
 
     const closeAddModal = () => {
       isAddModalOpen.value = false;
-      newForm.value = { numero_guichet: '', status: '', responsable: '' };
+      newForm.value = { numero_guichet: '', status: false, responsable: '' };
     };
 
     const openEditModal = (guichet) => {
-      selectedGuichetId.value = guichet.id;
-      editForm.value = { ...guichet };
-      isEditModalOpen.value = true;
-    };
+  selectedGuichetId.value = guichet.id;  // Récupère l'ID du guichet sélectionné
+  if (!selectedGuichetId.value) {
+    console.error("ID du guichet invalide");
+    showNotification("ID du guichet non valide.");
+    return;
+  }
+  editForm.value = { 
+    ...guichet, 
+    status: Boolean(guichet.status)  // Assure que le status est booléen
+  };
+  isEditModalOpen.value = true;
+};
+
 
     const closeEditModal = () => {
       isEditModalOpen.value = false;
-      editForm.value = { numero_guichet: '', status: '', responsable: '' };
+      editForm.value = { numero_guichet: '', status: false, responsable: '' };
     };
 
     const submitAddForm = async () => {
+      const formData = {
+        numero_guichet: newForm.value.numero_guichet,
+        status: Boolean(newForm.value.status),
+        responsable: newForm.value.responsable,
+      };
+
       try {
-        await axios.post('http://localhost:5002/api/guichets', newForm.value);
+        await axios.post('http://localhost:5002/api/guichets', formData);
         showNotification('Guichet ajouté avec succès !');
         closeAddModal();
-        await fetchGuichets(); 
+        await fetchGuichets();
       } catch (error) {
-        console.error("Error in submitAddForm:", error);
+        console.error("Erreur lors de l'ajout du guichet:", error);
         showNotification("Erreur lors de l'ajout du guichet !");
       }
     };
 
     const submitEditForm = async () => {
+  if (!selectedGuichetId.value) {
+    console.error("ID du guichet est manquant !");
+    showNotification("Impossible de trouver l'ID du guichet.");
+    return;
+  }
+
+  const updatedData = {
+    numero_guichet: editForm.value.numero_guichet,
+    status: editForm.value.status ? 'true' : 'false',  // Conversion en chaîne
+    responsable: editForm.value.responsable,
+  };
+
   try {
-    // Vérifie que l'ID du guichet est valide
-    if (!selectedGuichetId.value) {
-      throw new Error("L'ID du guichet n'est pas valide.");
-    }
-
-    // Assure-toi que les champs sont correctement formatés
-    const updatedData = {
-      numero_guichet: editForm.value.numero_guichet,
-      status: editForm.value.status === 'true' || editForm.value.status === true, // Envoie en tant que booléen
-      responsable: editForm.value.responsable
-    };
-
-    // Effectue la requête PUT avec les données corrigées
+    // L'ID doit être dans l'URL pour que la mise à jour se fasse correctement
     await axios.put(`http://localhost:5002/api/guichets/${selectedGuichetId.value}`, updatedData);
-
-    // Notification de succès
     showNotification('Guichet modifié avec succès !');
     closeEditModal();
     await fetchGuichets();
   } catch (error) {
-    // Affiche des détails sur l'erreur rencontrée
-    console.error("Erreur lors de la modification du guichet :", error.response ? error.response.data : error.message);
-    showNotification(error.response ? `Erreur API : ${error.response.data.message}` : "Erreur lors de la modification du guichet !");
+    console.error("Erreur dans submitEditForm:", error);
+    showNotification("Erreur lors de la modification du guichet !");
   }
 };
 
-    const confirmDelete = (id) => {
-      if (confirm("Êtes-vous sûr de vouloir supprimer ce guichet ?")) {
-        deleteGuichet(id);
-      }
-    };
-
-    const deleteGuichet = async (id) => {
+    const confirmDelete = async (guichetId) => {
       try {
-        await axios.delete(`http://localhost:5002/api/guichets/${id}`);
+        await axios.delete(`http://localhost:5002/api/guichets/${guichetId}`);
         showNotification('Guichet supprimé avec succès !');
         await fetchGuichets();
       } catch (error) {
-        console.error("Error in deleteGuichet:", error);
+        console.error("Erreur lors de la suppression du guichet:", error);
         showNotification("Erreur lors de la suppression du guichet !");
       }
-    };
-
-    const viewGuichet = (guichet) => {
-      // Implement logic for viewing guichet details if needed
-      console.log(guichet);
     };
 
     return {
@@ -199,38 +200,30 @@ export default {
       isEditModalOpen,
       newForm,
       editForm,
-      selectedGuichetId,
       notification,
-      fetchGuichets,
-      showNotification,
       openAddModal,
       closeAddModal,
+      submitAddForm,
       openEditModal,
       closeEditModal,
-      submitAddForm,
       submitEditForm,
       confirmDelete,
-      deleteGuichet,
-      viewGuichet
     };
   },
 };
 </script>
 
-<style>
-/* Apply the same CSS styles for guichet form and table */
+
+<style scoped>
 .form-container {
-  max-width: 800px; /* Taille élargie du formulaire */
-  margin: auto;
-  background-color: transparent;
-  border: none;
-  padding: 20px;
+  display: flex;
+  flex-direction: column;
 }
 
 .form-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1.5rem; /* Espace entre les colonnes de gauche et de droite du formulaire */
+  gap: 15px;
 }
 
 .form-left,
@@ -239,28 +232,12 @@ export default {
   flex-direction: column;
 }
 
-.modal {
-  display: block;
-  background-color: #fff;
-  padding: 2rem;
-  border-radius: 1rem;
-  width: 70%;
-}
-
-.modal-header {
-  font-size: 1.5rem;
-  font-weight: bold;
-}
-
-.modal-close {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  cursor: pointer;
-}
-
-.button-group {
+button-group {
   display: flex;
-  justify-content: space-around;
+  gap: 10px;
+}
+
+button-group .btn {
+  width: 100px;
 }
 </style>

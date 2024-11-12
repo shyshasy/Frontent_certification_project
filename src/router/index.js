@@ -4,62 +4,59 @@ import Dashboard from '../components/Dashboard.vue';
 import Home from '../components/Layout/Home.vue'; 
 import Register from '../components/Auth/Register.vue'; 
 import ResetPassword from '../components/Auth/ResetPassword.vue'; // Importation de ResetPassword
-// import UserProfile from '../components/User/UserProfile.vue'; 
 import QueueManagement from '../components/QueueManagement.vue'; 
 import EvaluationManager from '../components/EvaluationManager.vue';
 import Utilisateur from '../components/Utilisateur.vue';
-import Modal from '../components/Modal.vue'
+import Modal from '../components/Modal.vue';
 import Header from '../components/Layout/Header.vue';
-import GestionGuichet from '../components/GestionGuichet.vue'
-const routes = [
+import GestionGuichet from '../components/GestionGuichet.vue';
 
-  { path: '/login', component: Login },
-  { path: '/', redirect: '/login' },
+const routes = [
+  { path: '/login', component: Login }, // No protection needed for login
+  { path: '/', redirect: '/login' }, // Redirect to login page by default
+  { path: '/register', component: Register }, // No protection needed for register
+  { path: '/reset-password', component: ResetPassword }, // No protection needed for reset password
+  
+  // Protect all other routes with requiresAuth
   { path: '/dashboard', component: Dashboard, meta: { requiresAuth: true } },
   { path: '/home', component: Home, meta: { requiresAuth: true } },
-  { path: '/register', component: Register },
-  { path: '/reset-password', component: ResetPassword }, // Route pour la réinitialisation du mot de passe
-  // { path: '/user-profile', component: UserProfile, meta: { requiresAuth: true } },
   { path: '/queue', component: QueueManagement, meta: { requiresAuth: true } },
-  { path: '/evaluation-manager', component: EvaluationManager},
-  { path: '/utilisateur', component: Utilisateur },
-  { path: '/header', component: Header },
-  { path: '/queue-management', component:QueueManagement },
-  { path: '/gestion-guichet', component: GestionGuichet },
-
-
-  { path: '/modal', component:Modal},
-   // Redirige vers la page de connexion par défaut
+  { path: '/evaluation-manager', component: EvaluationManager, meta: { requiresAuth: true } },
+  { path: '/utilisateur', component: Utilisateur, meta: { requiresAuth: true } },
+  { path: '/header', component: Header, meta: { requiresAuth: true } },
+  { path: '/queue-management', component: QueueManagement, meta: { requiresAuth: true } },
+  { path: '/gestion-guichet', component: GestionGuichet, meta: { requiresAuth: true } },
+  { path: '/modal', component: Modal, meta: { requiresAuth: true } },
 ];
 
-// Création du routeur
+// Create the router instance
 const router = createRouter({
   history: createWebHistory(),
   routes,
 });
 
-// Protection des routes
+// Route protection based on authentication
 router.beforeEach((to, from, next) => {
-  // Vérifie si la route nécessite une authentification
+  // Check if the route requires authentication
   if (to.matched.some(record => record.meta.requiresAuth)) {
-    const userData = localStorage.getItem('user'); // Récupération des données utilisateur du localStorage
+    const userData = localStorage.getItem('user'); // Get user data from localStorage
     if (!userData) {
-      next({ path: '/login' }); // Redirige vers la page de connexion si aucune donnée utilisateur
+      next({ path: '/login' }); // Redirect to login if user data is not found
     } else {
       try {
-        const user = JSON.parse(userData); // Essaie de parser les données utilisateur
+        const user = JSON.parse(userData); // Try to parse user data
         if (user) {
-          next(); // Laisse passer la navigation si l'utilisateur est valide
+          next(); // Allow navigation if the user is valid
         } else {
-          next({ path: '/login' }); // Redirige vers la page de connexion si l'utilisateur n'est pas valide
+          next({ path: '/login' }); // Redirect to login if user is invalid
         }
       } catch (error) {
-        console.error("Erreur de parsing des données utilisateur :", error); // Gère les erreurs de parsing
-        next({ path: '/login' }); // En cas d'erreur de parsing, redirige vers la connexion
+        console.error("Error parsing user data:", error); // Handle parsing errors
+        next({ path: '/login' }); // Redirect to login on error
       }
     }
   } else {
-    next(); // Laisse passer la navigation si aucune authentification n'est requise
+    next(); // Allow navigation if no authentication is required
   }
 });
 

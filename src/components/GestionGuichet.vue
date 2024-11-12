@@ -37,7 +37,7 @@
       <form @submit.prevent="submitAddForm" class="form-container">
         <div class="form-grid">
           <div class="form-left">
-            <input v-model="newForm.numero_guichet" placeholder="numero du Guichet" class="form-control" required />
+            <input type="number" v-model="newForm.numero_guichet" placeholder="numero du Guichet" class="form-control" required />
             <select v-model="newForm.status" class="form-control" required>
               <option value="" disabled>Status</option>
               <option :value="true">Ouvert</option>
@@ -58,7 +58,7 @@
       <form @submit.prevent="submitEditForm" class="form-container">
         <div class="form-grid">
           <div class="form-left">
-            <input v-model="editForm.numero_guichet" placeholder="Numero du Guichet" class="form-control" required />
+            <input type="number" v-model="editForm.numero_guichet" placeholder="Numero du Guichet" class="form-control" required />
             <select v-model="editForm.status" class="form-control" required>
               <option value="" disabled>Status</option>
               <option value="true">Ouvert</option>

@@ -10,6 +10,7 @@ import Utilisateur from '../components/Utilisateur.vue';
 import Modal from '../components/Modal.vue';
 import Header from '../components/Layout/Header.vue';
 import GestionGuichet from '../components/GestionGuichet.vue';
+import PrendreTicket from '../components/PrendreTicket.vue'
 
 const routes = [
   { path: '/login', component: Login }, // No protection needed for login
@@ -18,15 +19,16 @@ const routes = [
   { path: '/reset-password', component: ResetPassword }, // No protection needed for reset password
   
   // Protect all other routes with requiresAuth
-  { path: '/dashboard', component: Dashboard, meta: { requiresAuth: true } },
-  { path: '/home', component: Home, meta: { requiresAuth: true } },
-  { path: '/queue', component: QueueManagement, meta: { requiresAuth: true } },
-  { path: '/evaluation-manager', component: EvaluationManager, meta: { requiresAuth: true } },
-  { path: '/utilisateur', component: Utilisateur, meta: { requiresAuth: true } },
-  { path: '/header', component: Header, meta: { requiresAuth: true } },
-  { path: '/queue-management', component: QueueManagement, meta: { requiresAuth: true } },
-  { path: '/gestion-guichet', component: GestionGuichet, meta: { requiresAuth: true } },
-  { path: '/modal', component: Modal, meta: { requiresAuth: true } },
+  { path: '/dashboard', component: Dashboard, },
+  { path: '/home', component: Home,  },
+  { path: '/queue', component: QueueManagement, },
+  { path: '/evaluation-manager', component: EvaluationManager,  },
+  { path: '/utilisateur', component: Utilisateur,  },
+  { path: '/header', component: Header,   },
+  { path: '/queue-management', component: QueueManagement,  },
+  { path: '/gestion-guichet', component: GestionGuichet, },
+  { path: '/modal', component: Modal,  },
+  { path: '/prendre-ticket', component: PrendreTicket,  },
 ];
 
 // Create the router instance
@@ -40,6 +42,7 @@ router.beforeEach((to, from, next) => {
   // Check if the route requires authentication
   if (to.matched.some(record => record.meta.requiresAuth)) {
     const userData = localStorage.getItem('user'); // Get user data from localStorage
+    
     if (!userData) {
       next({ path: '/login' }); // Redirect to login if user data is not found
     } else {

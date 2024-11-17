@@ -42,7 +42,7 @@
             </router-link>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link" to="/queue-management">
+            <router-link class="nav-link" to="/prendre-ticket">
               <i class="fa fa-list"></i> QueueManagement
             </router-link>
           </li>

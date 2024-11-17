@@ -6,7 +6,7 @@ export default defineConfig({
   publicDir: 'public', // Assurez-vous que cela est correct
   resolve: {
     alias: {
-      // Vous pouvez ajouter des alias si nécessaire
+      '@': '/src', // Ajoute cet alias pour que "@" pointe vers le dossier src
     }
   },
   vue: {

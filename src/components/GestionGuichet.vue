@@ -3,9 +3,6 @@
     <h2 class="text-center">Gestion des Guichets</h2>
     <button class="btn btn-success mb-3" @click="openAddModal">Ajouter un Guichet</button>
 
-    <!-- Message de confirmation -->
-    <div v-if="notification" class="alert alert-info">{{ notification }}</div>
-
     <!-- Tableau des guichets -->
     <table class="table table-striped">
       <thead>
@@ -37,12 +34,11 @@
       <form @submit.prevent="submitAddForm" class="form-container">
         <div class="form-grid">
           <div class="form-left">
-            <input type="number" v-model="newForm.numero_guichet" placeholder="numero du Guichet" class="form-control" required />
+            <input type="number" v-model="newForm.numero_guichet" placeholder="Numero du Guichet" class="form-control" required />
             <select v-model="newForm.status" class="form-control" required>
               <option value="" disabled>Status</option>
               <option :value="true">Ouvert</option>
-            <option :value="false">Fermé</option>
-
+              <option :value="false">Fermé</option>
             </select>
           </div>
           <div class="form-right">
@@ -61,8 +57,8 @@
             <input type="number" v-model="editForm.numero_guichet" placeholder="Numero du Guichet" class="form-control" required />
             <select v-model="editForm.status" class="form-control" required>
               <option value="" disabled>Status</option>
-              <option value="true">Ouvert</option>
-              <option value="false">Fermé</option>
+              <option :value="true">Ouvert</option>
+              <option :value="false">Fermé</option>
             </select>
           </div>
           <div class="form-right">
@@ -79,6 +75,7 @@
 import { ref } from 'vue';
 import axios from 'axios';
 import Modal from './Modal.vue';
+import { useToast } from 'vue-toastification';  // Importation de vue-toastification
 
 export default {
   components: {
@@ -91,7 +88,7 @@ export default {
     const newForm = ref({ numero_guichet: '', status: false, responsable: '' });
     const editForm = ref({ numero_guichet: '', status: false, responsable: '' });
     const selectedGuichetId = ref(null);
-    const notification = ref('');
+    const toast = useToast();  // Initialisation de vue-toastification
 
     const fetchGuichets = async () => {
       try {
@@ -104,11 +101,8 @@ export default {
 
     fetchGuichets();
 
-    const showNotification = (message) => {
-      notification.value = message;
-      setTimeout(() => {
-        notification.value = '';
-      }, 3000);
+    const showToast = (message, type = 'success') => {
+      toast(message, { type });
     };
 
     const openAddModal = () => {
@@ -121,19 +115,18 @@ export default {
     };
 
     const openEditModal = (guichet) => {
-  selectedGuichetId.value = guichet.id;  // Récupère l'ID du guichet sélectionné
-  if (!selectedGuichetId.value) {
-    console.error("ID du guichet invalide");
-    showNotification("ID du guichet non valide.");
-    return;
-  }
-  editForm.value = { 
-    ...guichet, 
-    status: Boolean(guichet.status)  // Assure que le status est booléen
-  };
-  isEditModalOpen.value = true;
-};
-
+      selectedGuichetId.value = guichet.id;
+      if (!selectedGuichetId.value) {
+        console.error("ID du guichet invalide");
+        showToast("ID du guichet non valide.", 'error');
+        return;
+      }
+      editForm.value = { 
+        ...guichet, 
+        status: Boolean(guichet.status)  
+      };
+      isEditModalOpen.value = true;
+    };
 
     const closeEditModal = () => {
       isEditModalOpen.value = false;
@@ -149,48 +142,47 @@ export default {
 
       try {
         await axios.post('http://localhost:5002/api/guichets', formData);
-        showNotification('Guichet ajouté avec succès !');
+        showToast('Guichet ajouté avec succès !');
         closeAddModal();
         await fetchGuichets();
       } catch (error) {
         console.error("Erreur lors de l'ajout du guichet:", error);
-        showNotification("Erreur lors de l'ajout du guichet !");
+        showToast("Erreur lors de l'ajout du guichet !", 'error');
       }
     };
 
     const submitEditForm = async () => {
-  if (!selectedGuichetId.value) {
-    console.error("ID du guichet est manquant !");
-    showNotification("Impossible de trouver l'ID du guichet.");
-    return;
-  }
+      if (!selectedGuichetId.value) {
+        console.error("ID du guichet est manquant !");
+        showToast("Impossible de trouver l'ID du guichet.", 'error');
+        return;
+      }
 
-  const updatedData = {
-    numero_guichet: editForm.value.numero_guichet,
-    status: editForm.value.status ? 'true' : 'false',  // Conversion en chaîne
-    responsable: editForm.value.responsable,
-  };
+      const updatedData = {
+        numero_guichet: editForm.value.numero_guichet,
+        status: editForm.value.status ? 'true' : 'false', 
+        responsable: editForm.value.responsable,
+      };
 
-  try {
-    // L'ID doit être dans l'URL pour que la mise à jour se fasse correctement
-    await axios.put(`http://localhost:5002/api/guichets/${selectedGuichetId.value}`, updatedData);
-    showNotification('Guichet modifié avec succès !');
-    closeEditModal();
-    await fetchGuichets();
-  } catch (error) {
-    console.error("Erreur dans submitEditForm:", error);
-    showNotification("Erreur lors de la modification du guichet !");
-  }
-};
+      try {
+        await axios.put(`http://localhost:5002/api/guichets/${selectedGuichetId.value}`, updatedData);
+        showToast('Guichet modifié avec succès !');
+        closeEditModal();
+        await fetchGuichets();
+      } catch (error) {
+        console.error("Erreur dans submitEditForm:", error);
+        showToast("Erreur lors de la modification du guichet !", 'error');
+      }
+    };
 
     const confirmDelete = async (guichetId) => {
       try {
         await axios.delete(`http://localhost:5002/api/guichets/${guichetId}`);
-        showNotification('Guichet supprimé avec succès !');
+        showToast('Guichet supprimé avec succès !');
         await fetchGuichets();
       } catch (error) {
         console.error("Erreur lors de la suppression du guichet:", error);
-        showNotification("Erreur lors de la suppression du guichet !");
+        showToast("Erreur lors de la suppression du guichet !", 'error');
       }
     };
 
@@ -200,7 +192,6 @@ export default {
       isEditModalOpen,
       newForm,
       editForm,
-      notification,
       openAddModal,
       closeAddModal,
       submitAddForm,
@@ -212,7 +203,6 @@ export default {
   },
 };
 </script>
-
 
 <style scoped>
 .form-container {

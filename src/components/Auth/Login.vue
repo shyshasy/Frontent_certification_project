@@ -27,7 +27,6 @@
         </div>
       </div>
       <button type="submit" class="btn btn-primary btn-block">Se connecter</button>
-      <div v-if="errorMessage" class="alert alert-danger mt-3">{{ errorMessage }}</div>
     </form>
 
     <!-- Lien pour "Mot de passe oublié" -->
@@ -46,34 +45,23 @@
 <script setup>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { useAuthStore } from '../../stores/auth';
+import { useToast } from 'vue-toastification';  // Import toast
 
+const store = useAuthStore()
 const email = ref('');
 const password = ref('');
-const errorMessage = ref('');
 const router = useRouter();
+const toast = useToast();  // Initialize toast
 
-// Fonction de gestion de la connexion
 const handleLogin = async () => {
-  try {
-    const response = await fetch('http://localhost:3002/api/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ email: email.value, password: password.value }),
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.message || 'Erreur de connexion');
-    }
-
-    const data = await response.json();
-    localStorage.setItem('user', JSON.stringify({ email: email.value }));
+  const success = await store.login(email.value, password.value);
+    
+  if (success) {
+    toast.success("Connexion réussie");  // Success toast
     router.push('/dashboard');
-  } catch (error) {
-    errorMessage.value = 'Une erreur est survenue lors de la connexion. Détails : ' + error.message;
-    console.error('Erreur de connexion :', error);
+  } else {
+    toast.error("Échec de la connexion");  // Error toast
   }
 };
 

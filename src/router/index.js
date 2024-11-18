@@ -19,16 +19,16 @@ const routes = [
   { path: '/reset-password', component: ResetPassword }, // No protection needed for reset password
   
   // Protect all other routes with requiresAuth
-  { path: '/dashboard', component: Dashboard, },
+  { path: '/dashboard', component: Dashboard,  },
   { path: '/home', component: Home,  },
-  { path: '/queue', component: QueueManagement, },
-  { path: '/evaluation-manager', component: EvaluationManager,  },
-  { path: '/utilisateur', component: Utilisateur,  },
-  { path: '/header', component: Header,   },
-  { path: '/queue-management', component: QueueManagement,  },
+  { path: '/queue', component: QueueManagement,  },
+  { path: '/evaluation-manager', component: EvaluationManager, },
+  { path: '/utilisateur', component: Utilisateur, },
+  { path: '/header', component: Header,  },
+  { path: '/queue-management', component: QueueManagement, },
   { path: '/gestion-guichet', component: GestionGuichet, },
   { path: '/modal', component: Modal,  },
-  { path: '/prendre-ticket', component: PrendreTicket,  },
+  { path: '/prendre-ticket', component: PrendreTicket, },
 ];
 
 // Create the router instance

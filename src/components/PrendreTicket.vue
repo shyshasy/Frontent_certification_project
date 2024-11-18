@@ -31,59 +31,78 @@
   </template>
   
   <script>
-  import { ref } from 'vue';
-  import axios from 'axios';
-  
-  export default {
-    setup() {
-      const clientName = ref('');
-      const ticket = ref(null);
-      const loading = ref(false);
-      const feedback = ref('');
-      const feedbackSubmitted = ref(false);
-  
-      const demanderTicket = async () => {
-        if (!clientName.value) return;
-  
-        loading.value = true;
-        try {
-          const response = await axios.post('http://localhost:5002/api/tickets', {
-            clientName: clientName.value,
-          });
-          ticket.value = response.data.ticket;
-        } catch (error) {
+import { ref } from 'vue';
+import axios from 'axios';
+
+export default {
+  setup() {
+    const clientName = ref('');
+    const ticket = ref(null);
+    const loading = ref(false);
+    const feedback = ref('');
+    const feedbackSubmitted = ref(false);
+
+    // Récupérer le jeton depuis le stockage (localStorage dans cet exemple)
+    const token = localStorage.getItem('authToken');  // Adaptez cela selon votre gestion du jeton
+
+    const demanderTicket = async () => {
+      if (!clientName.value) return;
+
+      loading.value = true;
+      try {
+        const response = await axios.post(
+          'http://localhost:5002/api/tickets',
+          { clientName: clientName.value },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`, // Inclure le jeton d'authentification
+            },
+          }
+        );
+        ticket.value = response.data.ticket;
+      } catch (error) {
+        if (error.response && error.response.status === 401) {
+          console.error('Jeton d\'authentification invalide ou expiré');
+        } else {
           console.error('Erreur lors de la demande de ticket', error);
-        } finally {
-          loading.value = false;
         }
-      };
-  
-      const submitFeedback = async () => {
-        if (!feedback.value) return;
-  
-        try {
-          await axios.post('http://localhost:5002/api/tickets/feedback', {
-            ticketId: ticket.value.numero,
-            feedback: feedback.value,
-          });
-          feedbackSubmitted.value = true;
-        } catch (error) {
-          console.error('Erreur lors de l\'envoi de l\'évaluation', error);
-        }
-      };
-  
-      return {
-        clientName,
-        ticket,
-        loading,
-        feedback,
-        feedbackSubmitted,
-        demanderTicket,
-        submitFeedback
-      };
-    },
-  };
-  </script>
+      } finally {
+        loading.value = false;
+      }
+    };
+
+    const submitFeedback = async () => {
+      if (!feedback.value) return;
+
+      try {
+        await axios.post(
+          'http://localhost:5002/api/tickets/feedback',
+          { ticketId: ticket.value.numero, feedback: feedback.value },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`, // Inclure le jeton d'authentification
+            },
+          }
+        );
+        feedbackSubmitted.value = true;
+      } catch (error) {
+        console.error('Erreur lors de l\'envoi de l\'évaluation', error);
+      }
+    };
+
+    return {
+      clientName,
+      ticket,
+      loading,
+      feedback,
+      feedbackSubmitted,
+      demanderTicket,
+      submitFeedback,
+    };
+  },
+};
+</script>
+
   
   <style scoped>
   .ticket-form {

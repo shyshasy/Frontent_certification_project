@@ -18,6 +18,7 @@
         </tr>
       </thead>
       <tbody>
+        
         <tr v-for="utilisateur in utilisateurs" :key="utilisateur.id">
           <td>{{ utilisateur.nom }}</td>
           <td>{{ utilisateur.email }}</td>
@@ -86,44 +87,27 @@
   </div>
 </template>
 
-  
-  <script>
-import { ref } from 'vue';
-import axios from 'axios';
+<script>
+import { ref, onMounted } from 'vue';
 import Modal from './Modal.vue';
+import { useUserStore } from '../stores/utilisateurStore.js';
 
 export default {
   components: {
     Modal,
   },
   setup() {
-    const utilisateurs = ref([]);
+    const userStore = useUserStore();
+
     const isAddModalOpen = ref(false);
     const isEditModalOpen = ref(false);
     const newForm = ref({ nom: '', email: '', role: '', status: '', password: '' });
     const editForm = ref({ nom: '', email: '', role: '', status: '', password: '' });
     const selectedUserId = ref(null);
-    const notification = ref('');
 
-    // Fetch users from the backend
-    const fetchUsers = async () => {
-      try {
-        const response = await axios.get('http://localhost:5002/api/utilisateurs');
-        utilisateurs.value = response.data;
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    // Appeler fetchUsers sur le montage du composant pour charger les utilisateurs
-    fetchUsers();
-
-    const showNotification = (message) => {
-      notification.value = message;
-      setTimeout(() => {
-        notification.value = '';
-      }, 3000);
-    };
+    onMounted(() => {
+      userStore.loadUserData(); // Charger les utilisateurs lors du montage du composant
+    });
 
     const openAddModal = () => {
       isAddModalOpen.value = true;
@@ -145,44 +129,20 @@ export default {
       editForm.value = { nom: '', email: '', role: '', status: '', password: '' };
     };
 
-    const submitAddForm = async () => {
-      try {
-        await axios.post('http://localhost:5002/api/utilisateurs', newForm.value);
-        showNotification('Utilisateur ajouté avec succès !');
-        closeAddModal();
-        await fetchUsers(); // Rafraîchir les utilisateurs après l'ajout
-      } catch (error) {
-        console.error("Error in submitAddForm:", error);
-        showNotification("Erreur lors de l'ajout de l'utilisateur !");
-      }
+    const submitAddForm = () => {
+      userStore.addUser(newForm.value);
+      closeAddModal();
     };
 
-    const submitEditForm = async () => {
-      try {
-        await axios.put(
-          `http://localhost:5002/api/utilisateurs/${selectedUserId.value}`,
-          editForm.value
-        );
-        showNotification('Utilisateur modifié avec succès !');
-        closeEditModal();
-        await fetchUsers(); // Rafraîchir les utilisateurs après la modification
-      } catch (error) {
-        console.error("Error in submitEditForm:", error);
-        showNotification("Erreur lors de la modification de l'utilisateur !");
-      }
+    const submitEditForm = () => {
+      userStore.updateUser(selectedUserId.value, editForm.value);
+      closeEditModal();
     };
 
-    const confirmDelete = async (id) => {
-      try {
-        const confirmation = window.confirm("Êtes-vous sûr de vouloir supprimer cet utilisateur ?");
-        if (!confirmation) return;
-
-        await axios.delete(`http://localhost:5002/api/utilisateurs/${id}`);
-        showNotification('Utilisateur supprimé avec succès !');
-        await fetchUsers(); // Rafraîchir les utilisateurs après la suppression
-      } catch (error) {
-        console.error("Error in confirmDelete:", error);
-        showNotification('Une erreur est survenue lors de la suppression de l\'utilisateur.');
+    const confirmDelete = (id) => {
+      const confirmation = window.confirm("Êtes-vous sûr de vouloir supprimer cet utilisateur ?");
+      if (confirmation) {
+        userStore.removeUser(id);
       }
     };
 
@@ -191,12 +151,12 @@ export default {
     };
 
     return {
-      utilisateurs,
+      utilisateurs: userStore.utilisateurs,
+      notification: userStore.notification,
       isAddModalOpen,
       isEditModalOpen,
       newForm,
       editForm,
-      notification,
       openAddModal,
       closeAddModal,
       openEditModal,
@@ -208,8 +168,9 @@ export default {
     };
   },
 };
+</script>
 
-  </script>
+
   
   <style>
   .form-container {

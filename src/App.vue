@@ -14,6 +14,7 @@ import Header from './components/Layout/Header.vue';
 import Footer from './components/Layout/Footer.vue';
 
 
+
 export default {
   components: {
     Header,
@@ -35,8 +36,8 @@ export default {
   text-align: center;
   color: #333;
   background-color: #ffffff;
-  min-height: 100vh;
-  display: flex;
+  /* min-height: 100vh; */
+  /* display: flex; */
   flex-direction: column;
   align-items: center;
   justify-content: flex-start; /* Alignement vertical, au-dessus */

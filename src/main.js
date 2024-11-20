@@ -2,8 +2,16 @@ import { createApp } from 'vue'; // Import de la fonction principale pour créer
 import App from './App.vue'; // Import du composant principal de l'application
 import router from './router'; // Import du routeur Vue
 import 'bootstrap/dist/css/bootstrap.min.css'; // Import des styles Bootstrap
-import 'font-awesome/css/font-awesome.css'; // Import des icônes Font Awesome
 import '../src/assets/main.css'; // Import de votre fichier CSS principal
+
+// Importation de FontAwesome SVG Core
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import { faEye, faEdit, faTrash, faPlusCircle, faSave } from '@fortawesome/free-solid-svg-icons'; // Import des icônes nécessaires
+import '@fortawesome/fontawesome-svg-core/styles.css'; // Import des styles pour FontAwesome
+
+// Ajouter les icônes à la bibliothèque FontAwesome
+library.add(faEye, faEdit, faTrash, faPlusCircle, faSave);
 
 // Importation de Vue I18n et des fichiers de traduction
 import { createI18n } from 'vue-i18n';
@@ -15,7 +23,7 @@ import ar from './locales/ar'; // Traduction en arabe
 import { createPinia } from 'pinia';
 
 // Importation de Vue Toastification pour les toasts
-import Toast, { POSITION } from 'vue-toastification'; // Importer Toastification
+import Toast, { POSITION } from 'vue-toastification';
 import 'vue-toastification/dist/index.css'; // Importer les styles de Toastification
 
 // Configuration des traductions
@@ -35,22 +43,25 @@ const app = createApp(App);
 
 // Configuration de Pinia et ajout à l'application
 const pinia = createPinia();
-app.use(pinia); // Utilisation de Pinia pour l'état global
+app.use(pinia);
 
 // Configuration du routeur et ajout à l'application
-app.use(router); // Utilisation du routeur
+app.use(router);
 
 // Configuration de i18n et ajout à l'application
-app.use(i18n); // Utilisation de vue-i18n pour la gestion des langues
+app.use(i18n);
 
 // Configuration de Vue Toastification et ajout à l'application
 app.use(Toast, {
-  position: POSITION.BOTTOM_RIGHT, // Position des toasts
-  timeout: 5000, // Durée d'affichage des toasts
-  closeOnClick: true, // Fermer le toast lorsqu'on clique dessus
-  pauseOnHover: true, // Pause sur hover
-  draggable: true, // Permet de faire glisser le toast
+  position: POSITION.BOTTOM_RIGHT,
+  timeout: 5000,
+  closeOnClick: true,
+  pauseOnHover: true,
+  draggable: true,
 });
+
+// Enregistrement global du composant FontAwesomeIcon
+app.component('font-awesome-icon', FontAwesomeIcon);
 
 // Montée de l'application Vue
 app.mount('#app');

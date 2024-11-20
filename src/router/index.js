@@ -10,7 +10,8 @@ import Utilisateur from '../components/Utilisateur.vue';
 import Modal from '../components/Modal.vue';
 import Header from '../components/Layout/Header.vue';
 import GestionGuichet from '../components/GestionGuichet.vue';
-import PrendreTicket from '../components/PrendreTicket.vue'
+// import PrendreTicket from '../components/PrendreTicket.vue'
+import TicketManager from '../components/TicketManager.vue'
 
 const routes = [
   { path: '/login', component: Login }, // No protection needed for login
@@ -28,7 +29,8 @@ const routes = [
   { path: '/queue-management', component: QueueManagement, },
   { path: '/gestion-guichet', component: GestionGuichet, },
   { path: '/modal', component: Modal,  },
-  { path: '/prendre-ticket', component: PrendreTicket, },
+  // { path: '/prendre-ticket', component: PrendreTicket, },
+  { path: '/ticket-manager', component:TicketManager, }
 ];
 
 // Create the router instance

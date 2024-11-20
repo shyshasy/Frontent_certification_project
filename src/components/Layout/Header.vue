@@ -42,8 +42,8 @@
             </router-link>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link" to="/prendre-ticket">
-              <i class="fa fa-list"></i> QueueManagement
+            <router-link class="nav-link" to="/ticket-manager">
+              <i class="fa fa-list"></i> TicketManager
             </router-link>
           </li>
           <li class="nav-item">
@@ -74,7 +74,8 @@
   left: 0;
   width: 100%; /* Prend toute la largeur de l'écran */
   z-index: 1000; /* S'assure que la navbar reste au-dessus des autres éléments */
-  background: linear-gradient(45deg, #007bff, #00c6ff, #00e3e3, #0004ff); 
+  /* background: linear-gradient( #0004ff);  */
+  background-color: #0004ffc7;
   padding: 0.75rem 1rem;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
   transition: background-color 0.5s ease, box-shadow 0.5s ease;

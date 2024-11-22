@@ -31,13 +31,13 @@
 
     <!-- Lien pour "Mot de passe oublié" -->
     <div class="text-center mt-4">
-      <a @click="navigateToResetPassword" class="forgot-password-link">Mot de passe oublié ?</a>
+      <router-link to="/forget-password" class="forgot-password-link">Mot de passe oublié ?</router-link>
     </div>
 
     <!-- Lien pour "S'inscrire" -->
     <div class="text-center mt-2">
       <span class="register-link">Pas encore de compte ?</span>
-      <a @click="navigateToRegister" class="register-link">S'inscrire</a>
+      <router-link to="/register" class="register-link">S'inscrire</router-link>
     </div>
   </div>
 </template>
@@ -55,24 +55,23 @@ const router = useRouter();
 const toast = useToast();  // Initialize toast
 
 const handleLogin = async () => {
+  // Appel de la fonction de connexion dans le store
   const success = await store.login(email.value, password.value);
     
   if (success) {
-    toast.success("Connexion réussie");  // Success toast
-    router.push('/dashboard');
+    // Si la connexion est réussie
+    toast.success("Connexion réussie", {
+      position: "top-right",
+      timeout: 3000,
+    });
+    router.push('/dashboard');  // Redirige vers le tableau de bord
   } else {
-    toast.error("Échec de la connexion");  // Error toast
+    // Si la connexion échoue
+    toast.error("Échec de la connexion", {
+      position: "top-right",
+      timeout: 3000,
+    });
   }
-};
-
-// Fonction pour rediriger vers "Mot de passe oublié"
-const navigateToResetPassword = () => {
-  router.push('/reset-password');
-};
-
-// Fonction pour rediriger vers "S'inscrire"
-const navigateToRegister = () => {
-  router.push('/register');
 };
 </script>
 

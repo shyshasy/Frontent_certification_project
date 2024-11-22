@@ -1,6 +1,6 @@
 import { useGuichetStore } from './stores/guichetStore';  // Importez le store
 
-eexport default {
+export default {
     state: {
       guichets: [],
     },

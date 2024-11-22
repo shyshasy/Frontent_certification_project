@@ -56,18 +56,18 @@
 
     <!-- Modale pour ajouter un utilisateur -->
     <Modal :isOpen="isAddModalOpen" title="Ajouter un Utilisateur" @close="closeAddModal">
-      <form @submit.prevent="submitAddForm" class="form-container">
+      <form @submit.prevent="submitAddForm" class="form-container pt-5 pb-5">
         <div class="form-grid">
           <div class="form-left">
-            <input v-model="newForm.nom" placeholder="Nom" class="form-control" required />
+            <input v-model="newForm.nom" placeholder="Nom" class=" form-control mb-3" required />
             <select v-model="newForm.role" class="form-control" required>
               <option value="" disabled>Rôle</option>
               <option value="admin">Administrateur</option>
-              <option value="client">Utilisateur</option>
+              <option value="client">Client</option>
             </select>
           </div>
           <div class="form-right">
-            <input v-model="newForm.email" placeholder="Email" type="email" class="form-control" required />
+            <input v-model="newForm.email" placeholder="Email" type="email" class="mb-3 form-control" required />
             <select v-model="newForm.status" class="form-control" required>
               <option value="" disabled>Statut</option>
               <option :value="true">Actif</option>
@@ -77,7 +77,7 @@
         </div>
         <input v-model="newForm.password" type="password" placeholder="Mot de passe" class="form-control mt-3" required />
          <!-- Bouton Ajouter -->
-      <button class="btn btn-primary mb-3 btn-right" @click="openAddModal">
+      <button class="btn btn-primary mb-3 btn-right  mt-3" @click="openAddModal">
         Ajouter un Utilisateur
       </button>
       </form>
@@ -88,10 +88,11 @@
       <form @submit.prevent="submitEditForm" class="form-container pt-5 pb-5">
         <div class="form-grid">
           <div class="form-left">
+            
             <input v-model="editForm.nom" placeholder="Nom" class="form-control mb-3" required />
             <select v-model="editForm.role" class="form-control" required>
               <option value="admin">Administrateur</option>
-              <option value="client">Utilisateur</option>
+              <option value="client">Client</option>
             </select>
           </div>
           <div class="form-right">

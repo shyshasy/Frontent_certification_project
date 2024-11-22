@@ -3,7 +3,7 @@ import Login from '../components/Auth/Login.vue';
 import Dashboard from '../components/Dashboard.vue'; 
 import Home from '../components/Layout/Home.vue'; 
 import Register from '../components/Auth/Register.vue'; 
-import ResetPassword from '../components/Auth/ResetPassword.vue'; // Importation de ResetPassword
+// import ResetPassword from '../components/Auth/ResetPassword.vue'; 
 import QueueManagement from '../components/QueueManagement.vue'; 
 import EvaluationManager from '../components/EvaluationManager.vue';
 import Utilisateur from '../components/Utilisateur.vue';
@@ -11,13 +11,16 @@ import Modal from '../components/Modal.vue';
 import Header from '../components/Layout/Header.vue';
 import GestionGuichet from '../components/GestionGuichet.vue';
 // import PrendreTicket from '../components/PrendreTicket.vue'
-import TicketManager from '../components/TicketManager.vue'
+import TicketManager from '../components/TicketManager.vue' ;
+
+import  ResetPassword from '../components/Auth/ResetPassword.vue';
+import ForgetPassword from '../components/Auth/ForgetPassword.vue';
 
 const routes = [
   { path: '/login', component: Login }, // No protection needed for login
   { path: '/', redirect: '/login' }, // Redirect to login page by default
   { path: '/register', component: Register }, // No protection needed for register
-  { path: '/reset-password', component: ResetPassword }, // No protection needed for reset password
+  { path: '/reset-password', component:ResetPassword }, // No protection needed for reset password
   
   // Protect all other routes with requiresAuth
   { path: '/dashboard', component: Dashboard,  },
@@ -30,7 +33,8 @@ const routes = [
   { path: '/gestion-guichet', component: GestionGuichet, },
   { path: '/modal', component: Modal,  },
   // { path: '/prendre-ticket', component: PrendreTicket, },
-  { path: '/ticket-manager', component:TicketManager, }
+  { path: '/ticket-manager', component:TicketManager, } ,
+  { path: '/forget-password', component:ForgetPassword, }
 ];
 
 // Create the router instance

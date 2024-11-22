@@ -55,8 +55,8 @@ export default {
   border-radius: 5px;
   border: 2px solid #007bff;
   background-color: #ffffff;
-  color: #333;
-  transition: border-color 0.3s;
+  /* color: #333; */
+  /* transition: border-color 0.3s; */
   width: 100%; /* Si tu veux que le sélecteur prenne toute la largeur */
 }
 
@@ -75,7 +75,7 @@ export default {
   background: #f8f9fa;
   border-radius: 10px;
   padding: 20px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  /* box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); */
   margin-left: auto;
   margin-right: auto;
   margin-top: 20px;

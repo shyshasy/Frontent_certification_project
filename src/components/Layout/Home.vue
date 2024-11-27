@@ -1,6 +1,6 @@
 <template>
     <div class="home-container">
-      <h1 class="title">Bienvenue sur votre Dashboard</h1>
+      <h1 class="title">Bienvenue !</h1>
       <p class="description">Accédez facilement à toutes les fonctionnalités avec un simple clic.</p>
   
       <div class="card-grid">

@@ -896,7 +896,7 @@ const toggleDropdown = (id) => {
           <td>{{ ticket.telephone }}</td>
           <td>{{ ticket.numero }}</td>
           <td>{{ ticket.statut }}</td>
-          <td>{{ getGuichetName(ticket.guichet) }}</td>
+          <td>{{ticket.guichet.numero_guichet }}</td>
           <td>
               {{
                 new Intl.DateTimeFormat('fr-FR', { 
@@ -957,15 +957,27 @@ const toggleDropdown = (id) => {
 
    
     <Modal :isOpen="isAddModalOpen" title="Ajouter un Ticket" @close="closeAddModal">
-      <form @submit.prevent="submitAddForm" class="form-container pt-3 pb-3">
-        <input v-model="newForm.nom" placeholder="Nom" class="form-control mb-3" required />
-        <input v-model="newForm.telephone" placeholder="Téléphone" class="form-control mb-3" required />
-        <input v-model.number="newForm.numero" placeholder="Numéro" class="form-control mb-3" required />
+      <form @submit.prevent="submitAddForm" class="form-container">
+        <div class="row">
+          <div class="col-md-6">
+            <input v-model="newForm.nom" placeholder="Nom" class="form-control mb-3" required />
+          </div>
+          <div class="col-md-6">
+            <input v-model="newForm.telephone" placeholder="Téléphone" class="form-control mb-3" required />
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <input v-model.number="newForm.numero" placeholder="Numéro" class="form-control mb-3" required />
+          </div>
+          <div class="col-md-6">
         <select v-model="newForm.statut" class="form-control mb-3" required>
           <option value="En attente">En attente</option>
           <option value="En cours">En cours</option>
           <option value="Terminé">Terminé</option>
         </select>
+      </div>
+        </div>
         <select v-model="newForm.guichet" class="form-control mb-3" required>
           <option disabled value="">Sélectionnez un guichet</option>
           <option v-for="guichet in guichets" :key="guichet.id" :value="guichet.id">
@@ -1097,13 +1109,17 @@ const confirmDelete = (id) => {
   if (window.confirm('Êtes-vous sûr de vouloir supprimer ce ticket ?')) {
     tickets.value = tickets.value.filter((ticket) => ticket.id !== id);
     notification.value = 'Ticket supprimé avec succès !';
+    ticketStore.deleteTicket(id)
+
   }
 };
 
 // Trouver le nom du guichet
 const getGuichetName = (id) => {
+  console.log("numero " ,id);
+  
   const guichet = guichets.value.find((g) => g.id === id);
-  return guichet ? guichet.numero_guichet : 'N/A';
+  return guichet ? guichet.numero_guichet: 'N/A';
 };
 
 // Changer le statut du ticket

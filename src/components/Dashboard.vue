@@ -90,6 +90,9 @@ const fetchTicketStats = async () => {
   ticketsEnCours.value = tickets.filter(ticket => ticket.statut === 'En cours').length;
   ticketsEnAttente.value = tickets.filter(ticket => ticket.statut === 'En attente').length;
 
+  console.log("tickets", tickets);
+  
+
   createStatusPieChart(tickets);
   createGuichetBarChart(tickets);
   createTimeLineChart(tickets);
@@ -117,7 +120,9 @@ const createStatusPieChart = (tickets) => {
 
 const createGuichetBarChart = (tickets) => {
   const guichetCounts = tickets.reduce((acc, ticket) => {
-    acc[ticket.guichet] = (acc[ticket.guichet] || 0) + 1;
+    acc[ticket.guichet_id] = (acc[ticket.guichet_id] || 0) + 1;
+    console.log(acc);
+    
     return acc;
   }, {});
 
@@ -134,6 +139,7 @@ const createGuichetBarChart = (tickets) => {
     }
   });
 };
+
 
 const createTimeLineChart = (tickets) => {
   const ticketsByDate = tickets.reduce((acc, ticket) => {

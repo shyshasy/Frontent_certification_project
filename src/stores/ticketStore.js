@@ -31,6 +31,7 @@ export function useTicketStore() {
       const response = await axios.post('http://localhost:5002/api/tickets', {nom, telephone, numero, statut, guichet_id, utilisateur_id} );
       tickets.value.push(response.data);
       ticketNotification.value = 'Ticket ajouté avec succès !';
+      await fetchTickets()
     } catch (error) {
       ticketNotification.value = "Erreur lors de l'ajout du ticket";
       console.error(error);
@@ -41,6 +42,7 @@ export function useTicketStore() {
     try {
       await axios.delete(`http://localhost:5002/api/tickets/${id}`);
       tickets.value = tickets.value.filter((ticket) => ticket.id !== id);
+     await fetchTickets()
       ticketNotification.value = 'Ticket supprimé avec succès !';
     } catch (error) {
       ticketNotification.value = "Erreur lors de la suppression du ticket";

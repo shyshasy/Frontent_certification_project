@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
     <div v-if="user">
       <h3>Profil de l'utilisateur</h3>
       <p>Email: {{ user.email }}</p>
@@ -22,4 +22,4 @@
     router.push('/login'); // Rediriger vers la page de connexion
   };
   </script>
-  
+   -->

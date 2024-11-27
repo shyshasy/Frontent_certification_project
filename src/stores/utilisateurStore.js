@@ -9,7 +9,7 @@ export const useUserStore = defineStore('userStore', {
       nom: '',
       email: '',
       role: '',
-      status: false,
+      status: false, // Notez que status est un booléen
     },
     notification: '',
   }),
@@ -18,8 +18,7 @@ export const useUserStore = defineStore('userStore', {
     // Charger tous les utilisateurs
     async loadUserData() {
       const authStore = useAuthStore();
-      const token = localStorage.getItem("token")
-      console.log(token)
+      const token = localStorage.getItem("token");
       try {
         const response = await axios.get('http://localhost:5002/api/utilisateurs', {
           headers: {
@@ -33,25 +32,34 @@ export const useUserStore = defineStore('userStore', {
     },
 
     // Ajouter un utilisateur
-    async addUser(newUser) {
+    async addUser(nom, role, email, status, password) {
       const authStore = useAuthStore();
+      const token = localStorage.getItem("token");
       try {
         const response = await axios.post(
           'http://localhost:5002/api/utilisateurs',
-          newUser,
+          {
+            nom: nom,
+            role: role,
+            email: email,
+            status: status,  // Passer le status comme un booléen true/false
+            password: password
+          },
           {
             headers: {
-              Authorization: `Bearer ${authStore.token}`,
+              Authorization: `Bearer ${token}`,
             },
           }
         );
+
         if (response.status !== 200 && response.status !== 201) {
           throw new Error("L'ajout a échoué.");
         }
-        this.loadUserData(); // Recharge la liste des utilisateurs
+
+       await this.loadUserData(); // Recharge la liste des utilisateurs
         this.showNotification('Utilisateur ajouté avec succès !');
       } catch (error) {
-        console.error('Erreur lors de l\'ajout de l\'utilisateur :', error.message);
+        console.error('Erreur lors de l\'ajout de l\'utilisateur :', error.response ? error.response.data : error.message);
         this.showNotification('Erreur lors de l\'ajout de l\'utilisateur !');
       }
     },
@@ -65,13 +73,15 @@ export const useUserStore = defineStore('userStore', {
           updatedUser,
           {
             headers: {
-              Authorization: `Bearer ${authStore.token}`,
+              Authorization: `Bearer ${token}`,
             },
           }
         );
+
         if (response.status !== 200) {
           throw new Error('La mise à jour a échoué.');
         }
+
         this.loadUserData(); // Recharge la liste des utilisateurs
         this.showNotification('Utilisateur modifié avec succès !');
       } catch (error) {
@@ -101,10 +111,10 @@ export const useUserStore = defineStore('userStore', {
     showNotification(message) {
       this.notification = message;
       setTimeout(() => {
-        this.notification = ''; // Effacer la notification après 3 secondes
+        this.notification = ''; 
       }, 3000);
     },
   },
 
-  persist: true, // Permet de persister le store (en localStorage ou sessionStorage)
+  persist: true, 
 });

@@ -1,240 +1,161 @@
 <template>
-    <div>
-        <!-- Bannière Principale -->
-        <header class="hero">
-            <div class="hero-content">
-                <h1>Gérez votre file d'attente comme jamais auparavant!</h1>
-                <p>Rejoignez notre plateforme innovante pour une expérience sans stress.</p>
-                <router-link class="btn btn-primary" to="/login">Commencez Maintenant</router-link>
+    <div class="home-container">
+      <h1 class="title">Bienvenue sur votre Dashboard</h1>
+      <p class="description">Accédez facilement à toutes les fonctionnalités avec un simple clic.</p>
+  
+      <div class="card-grid">
+        <!-- Ticket Manager -->
+        <div class="card ticket-manager">
+          <router-link to="/ticket-manager" class="card-link">
+            <div class="card-content">
+              <i class="fas fa-ticket-alt card-icon"></i>
+              <h3>Ticket Manager</h3>
+              <p>Suivez et gérez vos tickets en un clin d'œil.</p>
             </div>
-        </header>
-
-        <!-- Fonctionnalités -->
-        <section class="features">
-            <h2>Fonctionnalités Clés</h2>
-            <div class="feature-container">
-                <div class="feature-card">
-                    <div class="feature">
-                        <i class="fas fa-clock fa-3x feature-icon"></i> <!-- Icône pour Gestion du Temps -->
-                        <h3>Gestion du Temps</h3>
-                        <p>Optimisez le temps d'attente pour vos clients.</p>
-                    </div>
-                </div>
-                <div class="feature-card">
-                    <div class="feature">
-                        <i class="fas fa-users fa-3x feature-icon"></i> <!-- Icône pour Interaction Client -->
-                        <h3>Interaction Client</h3>
-                        <p>Communiquez facilement avec vos clients.</p>
-                    </div>
-                </div>
-                <div class="feature-card">
-                    <div class="feature">
-                        <i class="fas fa-chart-bar fa-3x feature-icon"></i> <!-- Icône pour Statistiques -->
-                        <h3>Statistiques</h3>
-                        <p>Analysez les performances de votre service.</p>
-                    </div>
-                </div>
-                <div class="feature-card">
-                    <div class="feature">
-                        <i class="fas fa-mobile-alt fa-3x feature-icon"></i> <!-- Icône pour Accessibilité Mobile -->
-                        <h3>Accessibilité Mobile</h3>
-                        <p>Gérez votre file d'attente depuis n'importe où.</p>
-                    </div>
-                </div>
-                <div class="feature-card">
-                    <div class="feature">
-                        <i class="fas fa-cogs fa-3x feature-icon"></i> <!-- Icône pour Personnalisation -->
-                        <h3>Personnalisation</h3>
-                        <p>Adaptez la plateforme à vos besoins spécifiques.</p>
-                    </div>
-                </div>
-                <div class="feature-card">
-                    <div class="feature">
-                        <i class="fas fa-bell fa-3x feature-icon"></i> <!-- Icône pour Notifications -->
-                        <h3>Notifications</h3>
-                        <p>Recevez des alertes en temps réel.</p>
-                    </div>
-                </div>
-                <div class="feature-card">
-                    <div class="feature">
-                        <i class="fas fa-shield-alt fa-3x feature-icon"></i> <!-- Icône pour Sécurité -->
-                        <h3>Sécurité</h3>
-                        <p>Protégez les données de vos clients.</p>
-                    </div>
-                </div>
-                <div class="feature-card">
-                    <div class="feature">
-                        <i class="fas fa-comments fa-3x feature-icon"></i> <!-- Icône pour Support Client -->
-                        <h3>Support Client</h3>
-                        <p>Assistance disponible à tout moment.</p>
-                    </div>
-                </div>
+          </router-link>
+        </div>
+  
+        <!-- Utilisateur -->
+        <div class="card utilisateur">
+          <router-link to="/utilisateur" class="card-link">
+            <div class="card-content">
+              <i class="fas fa-users card-icon"></i>
+              <h3>Utilisateurs</h3>
+              <p>Gérez vos utilisateurs facilement.</p>
             </div>
-        </section>
-
-        <!-- Témoignages -->
-        <section class="testimonials">
-            <h2>Avis de Nos Utilisateurs</h2>
-            <div class="testimonial-container">
-                <div class="testimonial">
-                    <img src="/User1.webp" alt="Utilisateur 1" />
-                    <p>"Une expérience exceptionnelle! La gestion de la file d'attente n'a jamais été aussi facile."</p>
-                    <h4>Marie Dupont</h4>
-                </div>
-                <div class="testimonial">
-                    <img src="/User2.webp" alt="Utilisateur 2" />
-                    <p>"Grâce à cette application, j'ai pu réduire le temps d'attente de mes clients."</p>
-                    <h4>Jean Martin</h4>
-                </div>
+          </router-link>
+        </div>
+  
+        <!-- Gestion de Guichet -->
+        <div class="card guichet">
+          <router-link to="/gestion-guichet" class="card-link">
+            <div class="card-content">
+              <i class="fas fa-cogs card-icon"></i>
+              <h3>Gestion de Guichet</h3>
+              <p>Configurez et optimisez vos guichets.</p>
             </div>
-        </section>
-
-        <!-- Appel à l'Action -->
-        <footer class="footer">
-            <p>Prêt à transformer votre gestion de file d'attente?</p>
-            <router-link class="btn btn-register" to="/register">Créer un Compte</router-link>
-        </footer>
+          </router-link>
+        </div>
+      </div>
     </div>
-</template>
-
-<script>
-export default {};
-</script>
-
-<style scoped>
-/* Style de la bannière principale */
-.hero {
-    background-image: url('online-satisfaction-rating-laptop.jpg'); /* Remplacez par votre image */
-    background-size: cover;
-    background-position: center;
-    height: 60vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: white;
+  </template>
+  
+  <script>
+  export default {};
+  </script>
+  
+  <style scoped>
+  /* Style principal de la page d'accueil */
+  .home-container {
     text-align: center;
-    position: relative;
-    padding: 20px; /* Ajout d'un rembourrage */
-}
-
-.hero::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5); /* Ombre sur l'image de fond */
-}
-
-.hero-content {
-    z-index: 1;
-}
-
-.btn {
-    padding: 12px 25px;
-    border-radius: 5px;
-    font-size: 18px;
-    transition: background 0.3s ease, transform 0.3s ease; /* Effet de transition */
-}
-
-.btn-primary {
-    background-color: #007bff; /* Couleur bleue */
-    color: white;
-}
-
-.btn-primary:hover {
-    background-color: #0056b3; /* Couleur au survol */
-    transform: translateY(-2px); /* Léger effet de levée */
-}
-
-.btn-register {
-    color: white;
-    font-weight: bold; /* Mettre en gras */
-    font-size: 20px; /* Taille de police plus grande */
-    padding: 15px 30px; /* Plus de rembourrage */
-    border-radius: 25px; /* Bordure arrondie */
-}
-
-.btn-register:hover {
-    background-color: hsla(244, 92%, 49%, 0.349); /* Couleur au survol */
-    border: 2px solid #4f09f5; /* Bordure au survol */
-    transform: translateY(-2px); /* Léger effet de levée */
-}
-
-.features, .testimonials {
-    padding: 50px 20px;
-    text-align: center;
-}
-
-.features h2, .testimonials h2 {
-    margin-bottom: 30px;
-}
-
-.feature-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Grille flexible */
-    gap: 20px; /* Espace entre les cartes */
-    justify-items: center; /* Centrer les cartes */
-}
-
-.feature-card {
-    padding: 20px;
-    background: #f9f9f9;
-    border-radius: 10px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s; /* Effet de transition */
-    width: 100%; /* Rendre la carte responsive */
-}
-
-.feature-card:hover {
-    transform: scale(1.05); /* Légère augmentation au survol */
-}
-
-.feature-icon {
-    color: #007bff; /* Couleur des icônes */
-    margin-bottom: 15px; /* Espacement sous l'icône */
-}
-
-.testimonial-container {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-}
-
-.testimonial {
-    margin: 20px;
-    padding: 20px;
-    background: #ffffff;
-    border-radius: 10px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    width: 300px;
-    text-align: center;
-    transition: transform 0.2s; /* Effet de transition */
-}
-
-.testimonial:hover {
-    transform: scale(1.05); /* Légère augmentation au survol */
-}
-
-.testimonial img {
-    width: 80px;
-    height: 80px; /* Ajout d'une hauteur fixe pour centrer l'image */
-    border-radius: 50%;
+    padding: 80px;
+    background-color: #eff6fb;
+    min-height: 100vh;
+  }
+  
+  .title {
+    font-size: 3rem;
+    color: #222;
+    font-weight: 700;
     margin-bottom: 15px;
-    display: block; /* Centrer l'image dans le conteneur */
-    margin-left: auto; /* Centrer horizontalement */
-    margin-right: auto; /* Centrer horizontalement */
-}
-
-.footer {
-    text-align: center;
-    padding: 30px;
-    background: #007bff; /* Couleur de fond du footer */
-    color: white;
-}
-
-.footer .btn {
-    margin-top: 10px;
-}
-</style>
+  }
+  
+  .description {
+    font-size: 1.25rem;
+    color: #555;
+    margin-bottom: 40px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  /* Grille des cartes */
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin-top: 50px;
+    padding: 0 20px;
+  }
+  
+  /* Style pour chaque carte */
+  .card {
+    background-color: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    position: relative;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+    cursor: pointer;
+    padding: 20px;
+  }
+  
+  .card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+    background-color: #007bff; /* Blue color on hover */
+  }
+  
+  .card:hover .card-icon {
+    color: #fff;
+  }
+  
+  .card-link {
+    text-decoration: none;
+    color: inherit;
+  }
+  
+  /* Icône de chaque carte */
+  .card-icon {
+    font-size: 3.5rem;
+    color: #007bff;
+    margin-bottom: 20px;
+    transition: color 0.3s ease;
+  }
+  
+  /* Titres des cartes */
+  .card h3 {
+    font-size: 1.75rem;
+    color: #333;
+    margin-bottom: 10px;
+    font-weight: 600;
+  }
+  
+  /* Description sous chaque titre */
+  .card p {
+    color: #777;
+    font-size: 1rem;
+    transition: color 0.3s ease;
+  }
+  
+  /* Nouveau style de fond - Dégradé linéaire pour chaque carte */
+  .ticket-manager:hover {
+    background: linear-gradient(135deg, #007bff, #00c6ff); /* Blue gradient */
+  }
+  
+  .utilisateur:hover {
+    background: linear-gradient(135deg, #007bff, #00c6ff); /* Blue gradient */
+  }
+  
+  .guichet:hover {
+    background: linear-gradient(135deg, #007bff, #00c6ff); /* Blue gradient */
+  }
+  
+  /* Mobile - Réduction de l'espace entre les cartes */
+  @media (max-width: 768px) {
+    .card-grid {
+      grid-template-columns: 1fr;
+      padding: 0;
+    }
+  
+    .title {
+      font-size: 2.5rem;
+    }
+  
+    .description {
+      font-size: 1rem;
+      margin-bottom: 30px;
+    }
+  }
+  </style>
+  

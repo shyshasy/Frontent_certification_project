@@ -59,11 +59,11 @@
       <form @submit.prevent="submitAddForm" class="form-container pt-5 pb-5">
         <div class="form-grid">
           <div class="form-left">
-            <input v-model="newForm.nom" placeholder="Nom" class=" form-control mb-3" required />
+            <input v-model="newForm.nom" placeholder="Nom" type="text" class=" form-control mb-3" required />
             <select v-model="newForm.role" class="form-control" required>
               <option value="" disabled>Rôle</option>
-              <option value="admin">Administrateur</option>
-              <option value="client">Client</option>
+              <option value="ADMIN">Administrateur</option>
+              <option value="CLIENT">Client</option>
             </select>
           </div>
           <div class="form-right">
@@ -91,8 +91,8 @@
             
             <input v-model="editForm.nom" placeholder="Nom" class="form-control mb-3" required />
             <select v-model="editForm.role" class="form-control" required>
-              <option value="admin">Administrateur</option>
-              <option value="client">Client</option>
+              <option value="ADMIN">Administrateur</option>
+              <option value="CLIENT">Client</option>
             </select>
           </div>
           <div class="form-right">
@@ -182,8 +182,9 @@ const closeEditModal = () => {
   editForm.value = { nom: '', email: '', role: '', status: '', password: '' };
 };
 
-const submitAddForm = () => {
-  userStore.addUser(newForm.value);
+const submitAddForm = async () => {
+  
+ await userStore.addUser(newForm.value.nom, newForm.value.role, newForm.value.email, newForm.value.status, newForm.value.password)
   closeAddModal();
 };
 

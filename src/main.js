@@ -3,6 +3,10 @@ import App from './App.vue'; // Import du composant principal de l'application
 import router from './router'; // Import du routeur Vue
 import 'bootstrap/dist/css/bootstrap.min.css'; // Import des styles Bootstrap
 import '../src/assets/main.css'; // Import de votre fichier CSS principal
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+
+
 
 // Importation de FontAwesome SVG Core
 import { library } from '@fortawesome/fontawesome-svg-core';

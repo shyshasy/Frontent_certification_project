@@ -38,6 +38,17 @@ export function useTicketStore() {
     }
   };
 
+  const editTicket = async (id, statut, nom="",  telephone="", numero="", guichet_id="", utilisateur_id="" ) => {
+    try {
+      await axios.put(`http://localhost:5002/api/tickets/${id}`, {nom, telephone, numero, statut, guichet_id, utilisateur_id});
+
+     await fetchTickets()
+      ticketNotification.value = 'Ticket modifié avec succès !';
+    } catch (error) {
+      ticketNotification.value = "Erreur lors de la modifié du ticket";
+      console.error(error);
+    }
+  };
   const deleteTicket = async (id) => {
     try {
       await axios.delete(`http://localhost:5002/api/tickets/${id}`);
@@ -60,6 +71,7 @@ export function useTicketStore() {
     allTickets,
     notification,
     isLoading,
+    editTicket,
 
     // Actions
     fetchTickets,

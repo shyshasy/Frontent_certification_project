@@ -890,7 +890,7 @@ const toggleDropdown = (id) => {
         </tr>
       </thead>
       <tbody>
-        <tr v-for="ticket in ticketStore.tickets.value" :key="ticket.id">
+        <tr v-for="ticket in ticketStore.tickets.value.sort((a,b)=> a.numero - b.numero)" :key="ticket.id">
 
           <td>{{ ticket.nom }}</td>
           <td>{{ ticket.telephone }}</td>
@@ -911,21 +911,21 @@ const toggleDropdown = (id) => {
             <button
               v-if="ticket.statut !== 'Terminé'"
               class="btn btn-outline-primary btn-sm me-2"
-              @click="changeStatus(ticket, 'En attente')"
+              @click=" ticketStore.editTicket(ticket.id, 'En attente')"
             >
               En attente
             </button>
             <button
               v-if="ticket.statut !== 'Terminé'"
               class="btn btn-outline-warning btn-sm me-2"
-              @click="changeStatus(ticket, 'En cours')"
+              @click="ticketStore.editTicket(ticket.id, 'En cours')"
             >
               En cours
             </button>
             <button
               v-if="ticket.statut !== 'Terminé'"
               class="btn btn-outline-success btn-sm me-2"
-              @click="changeStatus(ticket, 'Terminé')"
+              @click="ticketStore.editTicket(ticket.id, 'Terminé')"
             >
               Terminé
             </button>
@@ -1038,6 +1038,8 @@ const isEditModalOpen = ref(false);  // Déclarez une variable pour gérer l'ét
 const newForm = ref({ nom: '', telephone: '', numero: null, statut: 'En attente', guichet: '' });
 const selectedTicket = ref({});
 
+
+const id = ref()
 // Modale management
 const openAddModal = () => (isAddModalOpen.value = true);
 const closeAddModal = () => (isAddModalOpen.value = false);
@@ -1045,6 +1047,8 @@ const closeAddModal = () => (isAddModalOpen.value = false);
 const viewTicket = (ticket) => {
   selectedTicket.value = { ...ticket };
   isViewModalOpen.value = true;
+
+  
 };
 const closeViewModal = () => (isViewModalOpen.value = false);
 
@@ -1053,6 +1057,8 @@ const openEditModal = (ticket) => {
   
   selectedTicket.value = { ...ticket };  // Remplir le ticket sélectionné avec les données du ticket à éditer
   isEditModalOpen.value = true;  // Ouvrir le modal d'édition
+  id.value = selectedTicket.value.id
+
 };
 
 // Fermer le modal d'édition
@@ -1060,13 +1066,17 @@ const closeEditModal = () => {
   isEditModalOpen.value = false;
 };
 
+
 // Enregistrer les modifications du ticket
-const submitEditForm = () => {
-  const index = tickets.value.findIndex((ticket) => ticket.id === selectedTicket.value.id);
-  if (index !== -1) {
-    tickets.value[index] = { ...selectedTicket.value };  // Mettre à jour le ticket modifié
-    notification.value = 'Ticket modifié avec succès !';
-  }
+const submitEditForm = async() => {
+  console.log("IDENTIFIANT ", id.value)
+  // const index = tickets.value.findIndex((ticket) => ticket.id === selectedTicket.value.id);
+  // if (index !== -1) {
+  //   tickets.value[index] = { ...selectedTicket.value };  // Mettre à jour le ticket modifié
+  //   notification.value = 'Ticket modifié avec succès !';
+  // }
+
+   await ticketStore.editTicket(Number(id.value), selectedTicket.value.statut, selectedTicket.value.nom, selectedTicket.value.telephone, selectedTicket.value.numero, selectedTicket.value.guichet_id, selectedTicket.value.utilisateur_id)
   closeEditModal();  // Fermer le modal après modification
 };
 

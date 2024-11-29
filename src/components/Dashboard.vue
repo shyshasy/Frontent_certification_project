@@ -157,7 +157,8 @@ const createTimeLineChart = (tickets) => {
         label: 'Nombre de Tickets',
         data: Object.values(ticketsByDate),
         borderColor: '#e74c3c',
-        fill: false
+        fill: false, 
+        tension: 0.3
       }]
     }
   });

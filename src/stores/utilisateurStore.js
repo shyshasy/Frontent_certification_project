@@ -65,48 +65,51 @@ export const useUserStore = defineStore('userStore', {
     },
 
     // Modifier un utilisateur
-    async updateUser(id, updatedUser) {
-      const authStore = useAuthStore();
-      try {
-        const response = await axios.put(
-          `http://localhost:5002/api/utilisateurs/${id}`,
-          updatedUser,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-
-        if (response.status !== 200) {
-          throw new Error('La mise à jour a échoué.');
-        }
-
-        this.loadUserData(); // Recharge la liste des utilisateurs
-        this.showNotification('Utilisateur modifié avec succès !');
-      } catch (error) {
-        console.error('Erreur lors de la mise à jour de l\'utilisateur :', error.message);
-        this.showNotification('Erreur lors de la mise à jour de l\'utilisateur !');
+    // Modifier un utilisateur
+async updateUser(id, updatedUser) {
+  const authStore = useAuthStore();
+  const token = localStorage.getItem("token"); // Récupérer le token
+  try {
+    const response = await axios.put(
+      `http://localhost:5002/api/utilisateurs/${id}`,
+      updatedUser,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`, // Utilisation correcte du token
+        },
       }
-    },
+    );
+
+    if (response.status !== 200) {
+      throw new Error('La mise à jour a échoué.');
+    }
+
+    this.loadUserData(); // Recharge la liste des utilisateurs
+    this.showNotification('Utilisateur modifié avec succès !');
+  } catch (error) {
+    console.error('Erreur lors de la mise à jour de l\'utilisateur :', error.message);
+    this.showNotification('Erreur lors de la mise à jour de l\'utilisateur !');
+  }
+},
+
 
     // Supprimer un utilisateur
     async removeUser(id) {
-      const authStore = useAuthStore();
+      const token = localStorage.getItem("token");
       try {
         await axios.delete(`http://localhost:5002/api/utilisateurs/${id}`, {
           headers: {
-            Authorization: `Bearer ${authStore.token}`,
+            Authorization: `Bearer ${token}`,
           },
         });
-        this.loadUserData(); // Recharge la liste des utilisateurs
+        this.loadUserData(); // Reload user data after deletion
         this.showNotification('Utilisateur supprimé avec succès !');
       } catch (error) {
         console.error('Erreur lors de la suppression de l\'utilisateur :', error.message);
         this.showNotification('Erreur lors de la suppression de l\'utilisateur !');
       }
     },
-
+    
     // Afficher une notification
     showNotification(message) {
       this.notification = message;

@@ -37,10 +37,10 @@ Dépendances
 
 Fonctionnalités
 ----------------
-- Ajouter un élément dans la file d'attente.
-- Visualiser les éléments dans la file d'attente.
-- Mettre à jour les informations des éléments dans la file d'attente.
-- Supprimer un élément de la file d'attente.
+- Gestion des utilisateur (ajouter , modifier , voir , supprimer).
+- Gestion des guichets (ajouter , modifier , voir , supprimer).
+- Gestion des ticket (ajouter , modifier , voir , supprimer).
+
 
 *Auteur*
 

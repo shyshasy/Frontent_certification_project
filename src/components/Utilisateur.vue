@@ -59,7 +59,14 @@
       <form @submit.prevent="submitAddForm" class="form-container pt-5 pb-5">
         <div class="form-grid">
           <div class="form-left">
-            <input v-model="newForm.nom" placeholder="Nom" type="text" class=" form-control mb-3" required />
+            <input 
+              v-model="newForm.nom" 
+              placeholder="Nom" 
+              class="form-control mb-3" 
+              required 
+              pattern="[A-Za-zÀ-ÿ\s]+" 
+              title="Le nom ne doit contenir que des lettres."
+            />
             <select v-model="newForm.role" class="form-control" required>
               <option value="" disabled>Rôle</option>
               <option value="ADMIN">Administrateur</option>
@@ -146,11 +153,13 @@
 
 
 <script setup>
+import { useToast } from 'vue-toastification';
 import { ref, onMounted } from 'vue';
 import Modal from './Modal.vue';
 import { useUserStore } from '../stores/utilisateurStore.js';
 
 const userStore = useUserStore();
+const toast = useToast(); // Import toast
 
 const isAddModalOpen = ref(false);
 const isEditModalOpen = ref(false);
@@ -183,20 +192,34 @@ const closeEditModal = () => {
 };
 
 const submitAddForm = async () => {
-  
- await userStore.addUser(newForm.value.nom, newForm.value.role, newForm.value.email, newForm.value.status, newForm.value.password)
-  closeAddModal();
+  try {
+    await userStore.addUser(newForm.value.nom, newForm.value.role, newForm.value.email, newForm.value.status, newForm.value.password);
+    toast.success('Utilisateur ajouté avec succès !'); // Show success toast
+    closeAddModal();
+  } catch (error) {
+    toast.error('Erreur lors de l\'ajout de l\'utilisateur'); // Show error toast
+  }
 };
 
-const submitEditForm = () => {
-  userStore.updateUser(selectedUserId.value, editForm.value);
-  closeEditModal();
+const submitEditForm = async () => {
+  try {
+    await userStore.updateUser(selectedUserId.value, editForm.value);
+    toast.success('Utilisateur modifié avec succès !'); // Show success toast
+    closeEditModal();
+  } catch (error) {
+    toast.error('Erreur lors de la modification de l\'utilisateur'); // Show error toast
+  }
 };
 
-const confirmDelete = (id) => {
+const confirmDelete = async (id) => {
   const confirmation = window.confirm("Êtes-vous sûr de vouloir supprimer cet utilisateur ?");
   if (confirmation) {
-    userStore.removeUser(id);
+    try {
+      await userStore.removeUser(id);
+      toast.success('Utilisateur supprimé avec succès !'); // Show success toast
+    } catch (error) {
+      toast.error('Erreur lors de la suppression de l\'utilisateur'); // Show error toast
+    }
   }
 };
 
@@ -214,6 +237,7 @@ const closeViewModal = () => {
 
 const utilisateurs = userStore.utilisateurs;
 const notification = userStore.notification;
+
 </script>
 
 <style>

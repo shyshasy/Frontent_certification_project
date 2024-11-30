@@ -10,22 +10,22 @@
       <ul class="navbar-links">
         <li>
           <router-link class="nav-link" to="/dashboard" active-class="active-link">
-            <i class="fas fa-tachometer-alt"></i> Dashboard
+            <i class="fas fa-tachometer-alt"></i> Tableau De board
           </router-link>
         </li>
         <li>
           <router-link class="nav-link" to="/home" active-class="active-link">
-            <i class="fas fa-home"></i> Home
+            <i class="fas fa-home"></i> Acceuil
           </router-link>
         </li>
         <li v-if="useRoute().path === '/login'">
           <router-link class="nav-link"  to="/login" active-class="active-link">
-            <i class="fas fa-sign-in-alt"></i> Login
+            <i class="fas fa-sign-in-alt"></i> Se Connecter
           </router-link>
         </li>
         <li>
           <router-link class="nav-link" to="/ticket-manager" active-class="active-link">
-            <i class="fas fa-ticket-alt"></i> Ticket Manager
+            <i class="fas fa-ticket-alt"></i> Ticket 
           </router-link>
         </li>
         <li>
@@ -35,7 +35,7 @@
         </li>
         <li>
           <router-link class="nav-link" to="/gestion-guichet" active-class="active-link">
-            <i class="fas fa-cogs"></i> Gestion De Guichet
+            <i class="fas fa-cogs"></i> Guichet
           </router-link>
         </li>
       </ul>
